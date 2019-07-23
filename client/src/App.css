@@ -9,3 +9,9 @@
 .message:hover {
   background-color: yellow;
 }
+.addskill{
+  display: flex;
+  flex-basis:auto;
+
+
+}
