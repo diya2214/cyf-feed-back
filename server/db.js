@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 
-const dbUrl = process.env.MONGODB_URI || "mongodb://localhost:27017/cyf";
+const dbUrl = "mongodb://localhost:27017/CYFFeedbackDB";
 const configuration = { useNewUrlParser: true };
 
 export const getClient = () => new MongoClient(dbUrl, configuration);
