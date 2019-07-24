@@ -13,7 +13,7 @@ const staticDir = path.join(__dirname, "static");
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("dev"));
-
+app.use(express.json({ limit: '50mb', parameterLimit: 50000 }))
 // require HTTPS in production
 if (app.get("env") === "production") {
   app.enable("trust proxy");
