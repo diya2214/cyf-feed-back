@@ -17,7 +17,7 @@ import mockStudentsProfiles from "../mockStudentsProfiles.json";
 const selectedFloatingMentorName = "Maria";
 
 const h3Style = {
-  color: "red",
+  color: "red"
 };
 
 const submitStyle = {
@@ -216,36 +216,41 @@ export class FloatingMentor extends Component {
                 </Table.Body>
               </Pane>
 
-              <Pane height={500} width={900} float="left">
-                <Table.Body>
-                  <Table.Head>
-                    <Table.TextCell
-                      flexBasis={300}
-                      flexShrink={0}
-                      flexGrow={0}
-                    >
-                      Current Comment:
-                    </Table.TextCell>
-                  </Table.Head>
-                  <Table.Body>
-                    <Table.TextCell
-                      height={80}
-                      flexBasis={300}
-                      flexShrink={0}
-                      flexGrow={0}
-                    >
-                      <strong style={submitStyle}>
-                        {selectedStudentProfile.length > 0 &&
-                          this.state.FloatingMentorComments}
-                      </strong>
-                      {this.state.FloatingMentorComments && (
-                        <div>
-                          <br /> by {selectedFloatingMentorName} <br />
-                        </div>
-                      )}
-                    </Table.TextCell>
-                  </Table.Body>
-                </Table.Body>
+              <Pane height={500} width={500} float="left">
+                <Pane
+                  width="auto"
+                  height="auto"
+                  marginLeft={40}
+                  padding={10}
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="space-between"
+                  borderRadius={3}
+                  background="blueTint"
+                >
+                  <Heading>Current Session's Comment:</Heading>
+                  <br />
+                  <Pane
+                    elevation={3}
+                    marginLeft={36}
+                    marginBottom={10}
+                    height={100}
+                    padding={10}
+                    width={400}
+                    background="tint2"
+                    borderRadius={3}
+                  >
+                    <strong style={submitStyle}>
+                      {selectedStudentProfile.length > 0 &&
+                        this.state.FloatingMentorComments}
+                    </strong>
+                    {this.state.FloatingMentorComments && (
+                      <div>
+                        <br /> by {selectedFloatingMentorName} <br />
+                      </div>
+                    )}
+                  </Pane>
+                </Pane>
 
                 <Pane
                   width="auto"
@@ -259,7 +264,12 @@ export class FloatingMentor extends Component {
                   background="blueTint"
                 >
                   <Heading>
-                    Previous Comments writen by Floating Mentor (
+                    Previous Comments about{" "}
+                    <strong>
+                      {selectedStudentProfile.length > 0 &&
+                        selectedStudentProfile[0].name}
+                    </strong>{" "}
+                    writen by Irregular Mentor (
                     <strong>{selectedFloatingMentorName}</strong>
                     ):
                   </Heading>
@@ -302,26 +312,6 @@ export class FloatingMentor extends Component {
                 </Pane>
               </Pane>
               <Pane>
-                <TextInput
-                  width="100%"
-                  height={48}
-                  alignItems="right"
-                  width={800}
-                  placeholder="Floating Mentor's Comments..."
-                  onChange={e =>
-                    this.setState({
-                      commentSubmitted: e.target.value
-                    })
-                  }
-                />
-                <Button
-                  height={48}
-                  appearance="primary"
-                  marginTop={20}
-                  onClick={this.handyComments}
-                >
-                  Submit
-                </Button>
                 <Combobox
                   items={[
                     "HTML - CSS",
@@ -341,6 +331,26 @@ export class FloatingMentor extends Component {
                   }}
                 />
                 <h3 style={h3Style}> {this.state.errormessage}</h3>
+                <TextInput
+                  width="100%"
+                  height={48}
+                  alignItems="right"
+                  width={800}
+                  placeholder="Irregular Mentor's Comments..."
+                  onChange={e =>
+                    this.setState({
+                      commentSubmitted: e.target.value
+                    })
+                  }
+                />
+                <Button
+                  height={48}
+                  appearance="primary"
+                  marginLeft={30}
+                  onClick={this.handyComments}
+                >
+                  Submit
+                </Button>
               </Pane>
             </Pane>
           )}
