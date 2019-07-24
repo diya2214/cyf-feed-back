@@ -32,7 +32,7 @@ api.post("/student", (req, res) => {
   const client = getClient()
 
   client.connect(function () {
-    const db = client.db("CYFFeedbackDB")
+    const db = client.db("cyf_feedback")
     const collection = db.collection("student_profile")
     collection.insertOne(req.body, function (error, result) {
       res.send(error || result)
@@ -47,7 +47,7 @@ api.get('/student/:name', (req, res, next) => {
   const studentName = req.params.name
 
   client.connect(function () {
-    const db = client.db("CYFFeedbackDB")
+    const db = client.db("cyf_feedback");
     const collection = db.collection("student_profile")
     collection.find({name: studentName}).toArray(function (error, result) {
       console.log(result)
