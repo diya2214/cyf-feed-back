@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import "../App.css";
 import mockStudentsProfiles from "../mockStudentsProfiles.json";
+import { getStudent } from "./Api"
+
 import {
   Button, 
   Pane, 
@@ -18,37 +20,51 @@ export class FloatingMentor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      studentSelected: null,
+      studentSelected: '',
       moduleSelected: null,
       selectedStudentProfile: null,
       mentorComments: ' ',
       commentSubmitted: null
     };
   }
+
+  // componentWillMount = async () => {
+  //   if(this.state.studentSelected){
+  //   const  studentSelected  = this.state.studentSelected
+  //   console.log(studentSelected)
+  //   const selectedStudentProfile = await getStudent(studentSelected)
+  //   this.setState({
+  //     selectedStudentProfile,
+  //     loading: false
+  //   })
+  // }
+  // }
   handleModuleSelection= selected => {
-    console.log("handle Module working....",selected)
     this.setState({
       moduleSelected: selected,
       mentorComments: null
     });
   };
 
-  handleStudentSelection = selected => {
-    console.log("handleStudentSelection working....")
+  handleStudentSelection = async(selected) => {
+    const selectedStudentProfile = await getStudent(selected)
+
     this.setState({
       studentSelected: selected,
       mentorComments: null
     });
+
   };
 
 handleComments = (e) => {
-  console.log("handleComments working");
   this.setState({
     mentorComments: this.state.commentSubmitted,
     commentSubmitted: null
 
   })
-}
+};
+
+
   
   render() {
      var selectedStudentProfile = mockStudentsProfiles.find(s => {
@@ -171,7 +187,7 @@ handleComments = (e) => {
           background="blueTint"
         >
           <Heading is="h2">Mentors Comments: </Heading>
-              {console.log(this.state.moduleSelected)}
+              {/* {console.log(this.state.moduleSelected)} */}
           {(this.state.moduleSelected) &&                                      
                       (selectedStudentProfile.floatingMentorcomments
                         .filter(mentorComments=>mentorComments.module===this.state.moduleSelected).map(floatingMentor=>{
