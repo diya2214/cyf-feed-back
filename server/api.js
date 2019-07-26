@@ -6,7 +6,7 @@ const api = new Router();
 api.get("/", (_, res, next) => {
   const client = getClient();
 
-  client.connect((err) => {
+  client.connect(err => {
     if (err) {
       return next(err);
     }
@@ -18,7 +18,7 @@ api.get("/", (_, res, next) => {
 api.get("/test", (_, res, next) => {
   const client = getClient();
 
-  client.connect((err) => {
+  client.connect(err => {
     if (err) {
       return next(err);
     }
@@ -28,36 +28,99 @@ api.get("/test", (_, res, next) => {
 });
 
 api.post("/student", (req, res) => {
-  console.log("here", req.body)
-  const client = getClient()
-
-  client.connect(function () {
-    const db = client.db("cyf_feedback")
-    const collection = db.collection("student_profile")
-    collection.insertOne(req.body, function (error, result) {
-      res.send(error || result)
-      client.close()
-    })
-  })
-})
-
-
-api.get('/student/:name', (req, res, next) => {
+  console.log("here", req.body);
   const client = getClient();
-  const studentName = req.params.name
 
-  client.connect(function () {
+  client.connect(function() {
     const db = client.db("cyf_feedback");
-    const collection = db.collection("student_profile")
-    collection.find({name: studentName}).toArray(function (error, result) {
-      console.log(result)
-      res.send(error || result)
-      client.close()
-    })
-  })
-})
+    const collection = db.collection("student_profile");
+    collection.insertOne(req.body, function(error, result) {
+      res.send(error || result);
+      client.close();
+    });
+  });
+});
 
+api.get("/student/:name", (req, res, next) => {
+  const client = getClient();
+  const studentName = req.params.name;
 
+  client.connect(function() {
+    const db = client.db("cyf_feedback");
+    const collection = db.collection("student_profile");
+    collection.find({ name: studentName }).toArray(function(error, result) {
+      console.log(result);
+      res.send(error || result);
+      client.close();
+    });
+  });
+});
+
+//updating comments
+api.put("/updateComments", async (req, res) => {
+  console.log("update endpoint is starting");
+  const client = getClient();
+  client.connect(async err => {
+    if (err) {
+      return next(err);
+    }
+    let {
+      name,
+      floatingmentorcomment,
+      floatingmentorname,
+      selectedmodule
+    } = req.body;
+    const updateObject = {};
+
+    /*
+
+    floatingmentorcomment
+      ? (updateObject.floatingmentorcomment = floatingmentorcomment)
+      : null;
+    floatingmentorname
+      ? (updateObject.floatingmentorname = floatingmentorname)
+      : null;
+    selectedmodule ? (updateObject.selectedmodule = selectedmodule) : null;
+*/
+    const db = client.db("cyf_feedback");
+    const collection = db.collection("student_profile");
+    console.log(updateObject);
+
+    const options = {
+      returnOriginal: false
+    };
+
+    
+    const nameStudent= await collection.find({name:name}).toArray()
+    nameStudent[0].floatingMentorcomments.push({
+      id: nameStudent[0].floatingMentorcomments.length+1,
+      comment: floatingmentorcomment,
+      floatingmentorName: floatingmentorname,
+      date: "31/07/2019",
+      module: selectedmodule
+    });
+    console.log(nameStudent[0].floatingMentorcomments);
+    
+
+    collection.findOneAndUpdate(
+      { name: name },
+      {
+        $set: nameStudent[0]
+      },
+      options,
+      function(error, result) {
+        if (result.value) {
+          res.send(error || result.value);
+        } else {
+          console.log("no result");
+          res.sendStatus(404);
+        }
+      }
+    );
+
+    client.close();
+  });
+});
 
 // api.get('/student/:id', (req, res, next) => {
 //   console.log('I AM HEREEEEEEEEE')
@@ -74,7 +137,5 @@ api.get('/student/:name', (req, res, next) => {
 //     })
 //   })
 // })
-
-
 
 export default api;
