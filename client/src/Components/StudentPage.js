@@ -70,7 +70,7 @@ export default class StudentPage extends Component {
        }
 
 //        handleSubmit = () => {
-  // e.preventDefault();
+//   // e.preventDefault();
 //          const { name, photo, allTechSkills,allSoftSkills } = this.state
 //          const res = fetch("/student", {
 //          method: 'POST',
@@ -156,7 +156,6 @@ export default class StudentPage extends Component {
                 // onClick={this.handleClickSoft} 
                 appearance="primary">Add</Button>
                 </div>
-
                </Pane>
             </Pane>
           </Pane>
