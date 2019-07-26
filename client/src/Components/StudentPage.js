@@ -1,68 +1,172 @@
 import React, { Component } from "react";
-import { majorScale, Button, Pane, TextInputField, FilePicker, Combobox } from 'evergreen-ui'; 
-import {Link} from 'react-router-dom';
+import { majorScale, Button, Pane, TextInputField, FilePicker, Combobox } from 'evergreen-ui';
+// import { Link } from 'react-router-dom';
 import "../App.css";
 
+// export default testPage = () => <div>hi</div>
+export default class StudentPage extends Component {
 
-export class StudentPage extends Component {
-    constructor(props) {
-        super(props);
+  state = {
+    name: null,
+    photo: null,
+    techSkill: null,
+    softSkill: null,
+    allTechSkills: [],
+    allSoftSkills: []
+  }
+
+  handleFullName = (e) => {
+    let value = e.target.value;
+    this.setState({ name: value })
+  }
+
+  handleFile = (file) => {
+    this.setState({
+      photo: file[0].name
+    })
+
+  }
+
+  handleTech = (selected) => {
+    if (selected !== "None"){
+      this.setState({
+        techSkill: selected
+       })
     }
-render() {
- return (
-  <div>
-  {console.log('working')}
-    <h3>STUDENT PROFILE</h3>
-    <Pane>
-      <TextInputField
-         height={48}
-         width="75%"
-         label="Full Name"
-         placeholder="Full Name"/>
-        
-    <Pane>
-    <h5>Upload your photo here:</h5>
-     <FilePicker
-      multiple
-      width="75%"
-      marginBottom={32}
-      label="Upload your photo here"
-      onChange={files => console.log(files)}/>
+   }
 
-    <Pane>
-    <h5>Select the Technical skills you're working on:</h5>
-     <Combobox
-      width="75%"
-      items={['Arrays', 'Functions', 'Array Methods', 'Objects','None']}
-      onChange={selected => console.log(selected)}
-      placeholder="Tech Skills"
-      label="Technical skills"
-      autocompleteProps={{
-       // Used for the title in the autocomplete.
-      title: 'None'
-       }}
-       />
-    <Pane>
-    <h5>Select the Soft skills you're working on:</h5>
-     <Combobox
-     width="75%"
-     items={['Participating in my class', 'Supporting my class', 'Solving problems 1', 'Solving problems 2', 'None']}
-     onChange={selected => console.log(selected)}
-     placeholder="Soft Skills"
-     label="Soft Skills"
-     autocompleteProps={{
-      // Used for the title in the autocomplete.
-     title: 'None'
-     }}
-     />
-    </Pane>
-    </Pane>  
-    </Pane>
-     <Button height={majorScale(5)}>SUBMIT</Button>
-    </Pane>
-  </div>
- );
-}}
-    
+   handleSoft = (selected) =>{
+    if (selected !== "None"){
+    this.setState({
+      softSkill: selected
+     })
+    }
+   }
 
-export default StudentPage;
+   handleClickTech = () => {
+     const { allTechSkills, techSkill} = this.state
+     if (techSkill !== "None"){
+      allTechSkills.push(techSkill)
+      this.setState({
+        allTechSkills: allTechSkills
+      })
+     }else{
+      return
+     }
+   }
+
+   handleClickSoft = () => {
+
+    const { allSoftSkills, softSkill} = this.state
+    if (softSkill !== "None"){
+    allSoftSkills.push(softSkill)
+   this.setState({
+     allSoftSkills: allSoftSkills
+   })
+    } else {
+      return
+    }
+   
+       }
+
+//        handleSubmit = () => {
+//   // e.preventDefault();
+//          const { name, photo, allTechSkills,allSoftSkills } = this.state
+//          const res = fetch("/student", {
+//          method: 'POST',
+//          headers:{
+//          Accept: "application/json",
+//          "Content-Type":"application/json"
+//   },
+//         body:JSON.stringify({
+//         name: name,
+//         photo: photo,
+//         allSoftSkills: allSoftSkills,
+//         allTechSkills: allTechSkills
+//   })
+// })
+//        }
+
+
+  render() {
+
+    return (
+
+      <div>
+        <h3>STUDENT PROFILE</h3>
+        <Pane
+         // key={index}
+         elevation={4}
+         width={800}
+         padding={16}
+         borderRadius={3}
+         border="default"
+         background="blueTint"
+       >
+          <TextInputField
+            height={48}
+            width="95%"
+            label="Full Name"
+            placeholder="Full Name"
+            onChange={(e) => this.handleFullName(e)}
+          />
+
+          <Pane>
+            <h5>Upload your photo here:</h5>
+            <FilePicker
+              multiple
+              width="95%"
+              marginBottom={32}
+              label="Upload photo"
+              onChange={files => this.handleFile(files)}
+            />
+
+            <Pane>
+              <h5>Select the Technical skills you're working on:</h5>
+              <div className = "addSkills">
+              <Combobox
+                width="95%"
+                items={['Arrays', 'Functions', 'Array Methods', 'Objects', 'None']}
+                onChange={selected => this.handleTech(selected)}
+                placeholder="Tech Skills"
+                label="Tech Skills"
+                autocompleteProps={{
+                  // Used for the title in the autocomplete.
+                  title: 'None'
+                }}
+              />
+              <Button onClick={this.handleClickTech} appearance="primary">Add</Button>
+              </div>
+              
+              <Pane>
+                <h5>Select the Soft skills you're working on:</h5>
+                <div className = "addSkills">
+                <Combobox
+                  width="95%"
+                  items={['Participating in my class', 'Supporting my class', 'Solving problems 1', 'Solving problems 2', 'None']}
+                  onChange={selected => this.handleSoft(selected)}
+                  placeholder="Soft Skills"
+                  label="Soft Skills"
+                  autocompleteProps={{
+                    // Used for the title in the autocomplete.
+                    title: 'None'
+                  }}
+                />
+                <Button  
+                // onClick={this.handleClickSoft} 
+                appearance="primary">Add</Button>
+                </div>
+               </Pane>
+            </Pane>
+          </Pane>
+          <Button 
+          // type="submit" 
+          // onSubmit={handleSubmit} 
+          appearance="primary" height={majorScale(5)} 
+          marginTop={16}> SUBMIT PROFILE</Button>
+        </Pane>
+      </div>
+    );
+  }
+}
+// export default StudentPage;

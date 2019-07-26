@@ -9,3 +9,8 @@
 .message:hover {
   background-color: yellow;
 }
+.addSkills{
+  display: flex;
+
+  width: 95%;
+}
