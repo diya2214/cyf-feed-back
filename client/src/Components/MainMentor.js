@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "../App.css";
-import mockStudentsProfiles from "../mockStudentsProfiles.json";
-import { getStudent } from "./Api"
+// import mockStudentsProfiles from "../mockStudentsProfiles.json";
+import { getStudents, getSkills } from "./Api"
 
 import {
   Button, 
@@ -22,23 +22,24 @@ export class FloatingMentor extends Component {
     this.state = {
       studentSelected: '',
       moduleSelected: null,
-      selectedStudentProfile: null,
+      studentsProfile: [],
+      techSkills: null,
       mentorComments: ' ',
-      commentSubmitted: null
+      commentSubmitted: null,
+      selectedStudentProfile: null 
+
     };
   }
 
-  // componentWillMount = async () => {
-  //   if(this.state.studentSelected){
-  //   const  studentSelected  = this.state.studentSelected
-  //   console.log(studentSelected)
-  //   const selectedStudentProfile = await getStudent(studentSelected)
-  //   this.setState({
-  //     selectedStudentProfile,
-  //     loading: false
-  //   })
-  // }
-  // }
+  componentDidMount = async () => {
+    const studentsProfile = await getStudents()
+    const techSkills = await getSkills()
+    this.setState({
+      studentsProfile: studentsProfile,
+      techSkills,
+      loading: false
+    })  
+  }
   handleModuleSelection= selected => {
     this.setState({
       moduleSelected: selected,
@@ -46,11 +47,13 @@ export class FloatingMentor extends Component {
     });
   };
 
-  handleStudentSelection = async(selected) => {
-    const selectedStudentProfile = await getStudent(selected)
-
+  handleStudentSelection = (selected) => {
+    const selectedStudentProfile = this.state.studentsProfile.find(s => {
+      return s.name === selected;
+    });
     this.setState({
       studentSelected: selected,
+      selectedStudentProfile: selectedStudentProfile, 
       mentorComments: null
     });
 
@@ -64,13 +67,9 @@ handleComments = (e) => {
   })
 };
 
-
-  
   render() {
-     var selectedStudentProfile = mockStudentsProfiles.find(s => {
-       return s.name === this.state.studentSelected;
-     });
-     console.log(this.state.mentorComments);
+      const studentsProfile = this.state.studentsProfile
+      const selectedStudentProfile = this.state.selectedStudentProfile
      
     return (
       <div>
@@ -96,8 +95,7 @@ handleComments = (e) => {
             justifyContent="center"
           >
             <Combobox
-             
-              items={mockStudentsProfiles.map(s => s.name)}
+              items={studentsProfile.map(s => s.name)}
               height={38}
               onChange={selected => this.handleStudentSelection(selected)}
               placeholder="Students"
@@ -228,7 +226,7 @@ handleComments = (e) => {
 
         <Combobox
              
-              items={['HTML - CSS', 'JS-Core', 'JS-Core2', 'JS-Core3','React','Node DB']}
+              items={this.state.techSkills.map(s => s.module)}
               height={38}
               onChange={selected => this.handleModuleSelection(selected)}
               placeholder="Select Module"
