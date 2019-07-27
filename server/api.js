@@ -41,14 +41,14 @@ api.post("/student", (req, res) => {
   });
 });
 
-api.get("/student/:name", (req, res, next) => {
+api.get("/students", (req, res, next) => {
   const client = getClient();
-  const studentName = req.params.name;
+  // const studentName = req.params.name;
 
   client.connect(function() {
     const db = client.db("cyf_feedback");
     const collection = db.collection("student_profile");
-    collection.find({ name: studentName }).toArray(function(error, result) {
+    collection.find({ }).toArray(function(error, result) {
       console.log(result);
       res.send(error || result);
       client.close();
@@ -137,5 +137,20 @@ api.put("/updateComments", async (req, res) => {
 //     })
 //   })
 // })
+// FETCH SKILLS
+api.get("/skills/tech", (req, res, next) => {
+  const client = getClient();
+  client.connect(function() {
+    const db = client.db("cyf_feedback");
+    const collection = db.collection("technical_skills");
+    collection.find({ }).toArray(function(error, result) {
+      console.log(result);
+      res.send(error || result);
+      client.close();
+    });
+  });
+});
+
+
 
 export default api;

@@ -1,15 +1,14 @@
-// import swal from "sweetalert";
+import swal from "sweetalert";
 import MainMentor from "./MainMentor";
 import axios from "axios";
 
 
 
-export const getStudent = student => {
+export const getStudents = () => {
   return axios
-    .get(`/api/student/${student}`)
+    .get(`/api/students`)
     .then(response => {
-      console.log(' i am inside fetch ', response.data)
-      return response.data
+     return response.data
     })
     .catch(function (error) {
       swal("Error", "Could not fetch student data ", "error");
@@ -17,13 +16,27 @@ export const getStudent = student => {
     });
 };
 
+export const getSkills = () => {
+  return axios
+    .get(`/api/skills/tech`)
+    .then(response => {
+     return response.data
+    })
+    .catch(function (error) {
+      swal("Error", "Could not fetch student data ", "error");
+      return [];
+    });
+};
+
+
+
 export const handleMentor = () => {
   try {
-    console.log ("this is inside function ")
     <div>
     <MainMentor />
+    </div>
       }
      catch (error) {
-    // swal("Error", "Could not get main mentors", "error");
+    swal("Error", "Could not get main mentors", "error");
   }
 }

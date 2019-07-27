@@ -30,7 +30,7 @@ app.use(apiRoot, apiRouter);
 
 // Serve the bundled client from the server
 app.use(express.static(staticDir));
-app.get("/", (req, res, next) => {
+app.get("*", (req, res, next) => {
   if (req.url.startsWith(apiRoot)) {
     return next();
   }
