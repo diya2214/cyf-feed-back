@@ -10,7 +10,11 @@
   background-color: yellow;
 }
 .addSkills{
-  display: flex;
+  display: flex;  
+  width: 65%;
+  margin-bottom: 20px;
+}
+.stu-profile{
+  margin-left: 490px;
 
-  width: 95%;
 }
