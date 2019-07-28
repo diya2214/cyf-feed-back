@@ -67,7 +67,7 @@ api.put("/updateComments", async (req, res) => {
     let {
       name,
       floatingmentorcomment,
-      floatingmentorname,
+      floatingMentorName,
       selectedmodule
     } = req.body;
     const updateObject = {};
@@ -95,8 +95,8 @@ api.put("/updateComments", async (req, res) => {
     nameStudent[0].floatingMentorcomments.push({
       id: nameStudent[0].floatingMentorcomments.length+1,
       comment: floatingmentorcomment,
-      floatingmentorName: floatingmentorname,
-      date: "31/07/2019",
+      floatingMentorName: floatingMentorName,
+      date: "28/07/2019",
       module: selectedmodule
     });
     console.log(nameStudent[0].floatingMentorcomments);
