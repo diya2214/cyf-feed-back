@@ -13,7 +13,7 @@ import {
 } from "evergreen-ui";
 import "../App.css";
 // import mockStudentsProfiles from "../mockStudentsProfiles.json";
-import { getStudent } from "./Api";
+import {getStudents, getSkills} from "./Api";
 
 const selectedFloatingMentorName = "Maria";
 
@@ -36,7 +36,8 @@ export class FloatingMentor extends Component {
       errormessage: null,
       moduleSelected: null,
       mentorComments: " ",
-      studentprofile: null
+      studentsProfile: [],
+      techSkills: null
     };
   }
 
@@ -60,19 +61,33 @@ export class FloatingMentor extends Component {
            }};
          */
 
-  handyStudent = async selected => {
+  componentDidMount = async () => {
+    const studentsProfile = await getStudents();
+    const techSkills = await getSkills();
+    this.setState({
+      studentsProfile: studentsProfile,
+      techSkills,
+      loading: false
+    });
+  };
+
+  handyStudent = (selected) => {
     console.log("handystudent working....");
+    const selectedStudentProfile = this.state.studentsProfile.find(s => {
+      return s.name === selected;
+    });
     this.setState({
       clickedStudent: selected,
       errormessage: null,
+      selectedStudentProfile: selectedStudentProfile
     });
 
-//    const selectedStudentProfile = await getStudent(selected);
-    
-    this.setState({
-            selectedStudentProfile: await getStudent(selected)
-          });
-          console.log("this.state.selectedStudentProfile:");
+    //    const selectedStudentProfile = await getStudent(selected);
+
+  //  this.setState({
+  //    selectedStudentProfile: await getStudents(selected)
+  //  });
+    console.log("this.state.selectedStudentProfile:");
     console.log(this.state.selectedStudentProfile);
   };
 
@@ -107,7 +122,7 @@ export class FloatingMentor extends Component {
         body: JSON.stringify({
           name: this.state.clickedStudent,
           floatingmentorcomment: this.state.commentSubmitted,
-          floatingmentorname: selectedFloatingMentorName,
+          floatingMentorName: selectedFloatingMentorName,
           selectedmodule: this.state.moduleSelected
         })
       });
@@ -126,6 +141,7 @@ export class FloatingMentor extends Component {
     } catch (err) {
       console.log(err);
     }
+    
   };
 
   handleError = () => {
@@ -148,21 +164,22 @@ export class FloatingMentor extends Component {
     console.log("this.state.studentprofile:", this.state.studentprofile);
     console.log("render working");
 
-  //  var selectedStudentProfile = mockStudentsProfiles.filter(s => {
-  //    return s.name === this.state.clickedStudent;
-  //  /});
-   
-  
- // this.setState({
- //  clickedStudent: this.state.selectedStudentProfile
- // });
+    //  var selectedStudentProfile = mockStudentsProfiles.filter(s => {
+    //    return s.name === this.state.clickedStudent;
+    //  /});
 
-  console.log(this.state.FloatingMentorComments);
-  console.log(
-    "this.state.selectedStudentProfile[0]:",
-    this.state.selectedStudentProfile
-  );
+    // this.setState({
+    //  clickedStudent: this.state.selectedStudentProfile
+    // });
 
+    console.log(this.state.FloatingMentorComments);
+    console.log(
+      "this.state.selectedStudentProfile[0]:",
+      this.state.selectedStudentProfile
+    );
+
+    const studentsProfile = this.state.studentsProfile;
+    const selectedStudentProfile = this.state.selectedStudentProfile;
     return (
       <div>
         <Pane
@@ -187,7 +204,9 @@ export class FloatingMentor extends Component {
             justifyContent="center"
           >
             <Combobox
-              items={["Ahmet", "Madiha", "Sola"]}
+              // studentsProfile.map(s => s.name)
+
+              items={studentsProfile.map(s => s.name)}
               height={48}
               onChange={selected => this.handyStudent(selected)}
               placeholder="Students"
@@ -202,12 +221,12 @@ export class FloatingMentor extends Component {
                 <Avatar
                   src={
                     this.state.selectedStudentProfile
-                      ? this.state.selectedStudentProfile[0].studentPhoto
+                      ? this.state.selectedStudentProfile.studentPhoto
                       : null
                   }
                   name={
                     this.state.selectedStudentProfile
-                      ? this.state.selectedStudentProfile[0].name
+                      ? this.state.selectedStudentProfile.name
                       : null
                   }
                   size={80}
@@ -227,7 +246,7 @@ export class FloatingMentor extends Component {
                       flexGrow={0}
                     >
                       {this.state.selectedStudentProfile &&
-                        this.state.selectedStudentProfile[0].name}
+                        this.state.selectedStudentProfile.name}
                     </Table.TextCell>
                   </Table.Head>
                   <Table.Body>
@@ -241,7 +260,7 @@ export class FloatingMentor extends Component {
                       </Table.TextCell>
                       <Table.TextCell>
                         {this.state.selectedStudentProfile &&
-                          this.state.selectedStudentProfile[0].softSkills}
+                          this.state.selectedStudentProfile.softSkills}
                       </Table.TextCell>
                     </Table.Row>
                     <Table.Row>
@@ -254,8 +273,7 @@ export class FloatingMentor extends Component {
                       </Table.TextCell>
                       <Table.TextCell>
                         {this.state.selectedStudentProfile &&
-                          this.state.selectedStudentProfile[0]
-                            .techinalSkills}
+                          this.state.selectedStudentProfile.techinalSkills}
                       </Table.TextCell>
                     </Table.Row>
                     <Table.Row>
@@ -351,15 +369,18 @@ export class FloatingMentor extends Component {
                     Previous Comments about{" "}
                     <strong>
                       {this.state.selectedStudentProfile &&
-                        this.state.selectedStudentProfile[0].name}
+                        this.state.selectedStudentProfile.name}
                     </strong>{" "}
                     writen by Irregular Mentor (
                     <strong>{selectedFloatingMentorName}</strong>
                     ):
                   </Heading>
-                  {console.log("result=>",this.state.selectedStudentProfile[0].floatingMentorcomments)}
+                  {console.log(
+                    "selectedStudentProfile[0] result=>",
+                    this.state.selectedStudentProfile.floatingMentorcomments
+                  )}
                   {this.state.selectedStudentProfile
-                    ? this.state.selectedStudentProfile[0].floatingMentorcomments.map(
+                    ? this.state.selectedStudentProfile.floatingMentorcomments.map(
                         s => {
                           if (
                             s.floatingMentorName ===
@@ -397,14 +418,7 @@ export class FloatingMentor extends Component {
               </Pane>
               <Pane>
                 <Combobox
-                  items={[
-                    "HTML - CSS",
-                    "JS-Core",
-                    "JS-Core2",
-                    "JS-Core3",
-                    "React",
-                    "Node DB"
-                  ]}
+                  items={this.state.techSkills.map(s => s.module)}
                   height={38}
                   onChange={selected =>
                     this.handleModuleSelection(selected)
