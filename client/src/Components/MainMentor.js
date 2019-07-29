@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "../App.css";
 // import mockStudentsProfiles from "../mockStudentsProfiles.json";
-import { getStudents, getSkills } from "./Api"
+import { getStudents, getSkills, insertComments } from "./Api"
 
 import {
   Button, 
@@ -16,7 +16,7 @@ import {
   
   Paragraph } from "evergreen-ui"
 
-export class FloatingMentor extends Component {
+export class MainMentor extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,7 +26,7 @@ export class FloatingMentor extends Component {
       techSkills: null,
       mentorComments: ' ',
       commentSubmitted: null,
-      selectedStudentProfile: null 
+      student: null 
 
     };
   }
@@ -48,18 +48,21 @@ export class FloatingMentor extends Component {
   };
 
   handleStudentSelection = (selected) => {
-    const selectedStudentProfile = this.state.studentsProfile.find(s => {
+    const student = this.state.studentsProfile.find(s => {
       return s.name === selected;
     });
     this.setState({
       studentSelected: selected,
-      selectedStudentProfile: selectedStudentProfile, 
+      student: student, 
       mentorComments: null
     });
 
   };
 
 handleComments = (e) => {
+  const commentData={comments:this.state.commentSubmitted,
+  module: this.state.moduleSelected}
+  insertComments(this.state.student.name,commentData)
   this.setState({
     mentorComments: this.state.commentSubmitted,
     commentSubmitted: null
@@ -69,34 +72,38 @@ handleComments = (e) => {
 
   render() {
       const studentsProfile = this.state.studentsProfile
-      const selectedStudentProfile = this.state.selectedStudentProfile
+      const student = this.state.student
      
     return (
       <div>
         <Pane
           // key={index}
           elevation={4}
-          height="auto"
+          height="100%"
           width="auto"
           padding={20}
-          position="center"
           display="flex"
           flexWrap = "wrap"
-          alignItems="center"
+          justifyContent = "space-around"
           borderRadius={3}
           border="default"
-          background="blueTint"
+          // background="tint1"
         >
           <Pane
             width="100%"
             height="100%"
             display="flex"
-            alignItems="center"
-            justifyContent="center"
+            flexDirection="column"
+            justifyContent="space-around"  
+            padding={20}
+            background="orangeTint"
+
           >
+          <Heading is="h2">Select student</Heading>
+
             <Combobox
               items={studentsProfile.map(s => s.name)}
-              height={38}
+              height={34}
               onChange={selected => this.handleStudentSelection(selected)}
               placeholder="Students"
               autocompleteProps={{
@@ -106,88 +113,146 @@ handleComments = (e) => {
 
           </Pane>
 
-        {(selectedStudentProfile) &&   (
+        {(student) &&   (
          <Pane
          display="flex"
-         alignItems = "flex-start"
-         marginTop = {5}
+         marginTop = {10}
          > 
-        <Pane height="auto" width={500} float="left">
+        <Pane 
+        elevation={2}
+        borderRadius={5}
+        height={450} 
+        width={500} 
+        dislay="flex"
+        background="tint1">
         <Avatar
           src={
-            selectedStudentProfile
-              ? selectedStudentProfile.studentPhoto
+            student
+              ? student.studentPhoto
               : null
           }
           name={
-            selectedStudentProfile
-              ? selectedStudentProfile.name
+            student
+              ? student.name
               : null
           }
-          size={80}
+          size={85}
+          alignSelf= "flex-center"
+
         />
         <Table.Body>
           <Table.Head>
-            <Table.TextCell flexBasis={200} flexShrink={0} flexGrow={0}>
-              Student Name:
+            <Table.TextCell flexBasis={150} flexShrink={0} flexGrow={0}>
+             Name:
             </Table.TextCell>
-            <Table.TextCell flexBasis={200} flexShrink={0} flexGrow={0}>
-              {selectedStudentProfile &&
-                selectedStudentProfile.name}
+            
+            <Table.TextCell flexBasis={150} flexShrink={0} flexGrow={0}>
+              {student &&
+                student.name}
             </Table.TextCell>
           </Table.Head>
           <Table.Body>
-            <Table.Row>
-              <Table.TextCell flexBasis={200} flexShrink={0} flexGrow={0}>
-                Students Soft Skill:
+          <Table.Row>
+              <Table.TextCell flexBasis={150} flexShrink={0} flexGrow={0}>
+                 Class:
               </Table.TextCell>
               <Table.TextCell>
-              {selectedStudentProfile &&
-                  selectedStudentProfile.softSkills}
+              {student &&
+                  student.class}
               </Table.TextCell>
             </Table.Row>
             <Table.Row>
-              <Table.TextCell flexBasis={200} flexShrink={0} flexGrow={0}>
-                Students Tech Skill:
+              <Table.TextCell flexBasis={150} flexShrink={0} flexGrow={0}>
+                 Soft Skills:
               </Table.TextCell>
               <Table.TextCell>
-                {selectedStudentProfile &&
-                  selectedStudentProfile.techinalSkills}
+              {student &&
+                  student.softSkills.join(', ')}
+              </Table.TextCell>
+            </Table.Row>
+             <Table.Row>
+              <Table.TextCell flexBasis={150} flexShrink={0} flexGrow={0}>
+                Technical Skill:
+              </Table.TextCell>
+              <Table.TextCell>
+                {student &&
+                  student.techinalSkills.join(', ')}
               </Table.TextCell>
             </Table.Row>
             
             
-            <Table.Row intent="success">
-              <Table.TextCell flexBasis={200} flexShrink={1} flexGrow={0}>
+            <Table.Row intent="warning">
+              <Table.TextCell flexBasis={150} flexShrink={1} flexGrow={0}>
               Evaluation Summary:
               </Table.TextCell >
               </Table.Row>
-              <Table.Row height="auto" paddingY={12}>
+              {/* <Table.Row height="auto" paddingY={12}> */}
               <Paragraph>
-                {selectedStudentProfile &&
+                {student &&
                   this.state.mentorComments}
                   </Paragraph>
-            </Table.Row>
+            {/* </Table.Row> */}
             </Table.Body>
             </Table.Body>
 
       </Pane>       
-      
       <Pane
           width="auto"
-          height="auto"
+          height="100%"
           marginLeft={20}
           padding={10}
           display="flex"
-          flexDirection= "column"
-          justifyContent = "space-between"
+          // flexDirection= "column"
+          justifyContent = "space-around"
           borderRadius={3}
-          background="blueTint"
+          elevation={2}
+          background="tint1"
         >
-          <Heading is="h2">Mentors Comments: </Heading>
+
+        <Pane
+          display="flex"
+          height= {340}
+          flexDirection= "column"
+          marginLeft={20}
+          justifyContent="space-around"          
+         >
+        <Heading is="h2">Student Evaluation Summary</Heading>
+
+        <Combobox
+               openOnFocus
+              items={this.state.techSkills.map(s => s.module)}
+              height={34}
+              onChange={selected => this.handleModuleSelection(selected)}
+              placeholder="Select Module"
+              autocompleteProps={{
+              title: "Select Module"
+              }}
+            />
+         <Textarea
+          height={200}
+          width={400}
+          placeholder="Mentor evaluation summary"
+          onChange={e => this.setState({ commentSubmitted: e.target.value })}
+      // value={this.state.mentorComments}
+           /> 
+              <Button
+                height={38}
+                width={80}
+                appearance="primary"
+                marginTop={8}
+                alignSelf= "flex-end"
+                onClick={this.handleComments}
+              >
+                Submit
+              </Button>
+              </Pane >
+                </Pane>
+                <Pane marginLeft={20} width="25em">
+                <Heading is="h2">Mentors Comments: </Heading>
+
               {/* {console.log(this.state.moduleSelected)} */}
           {(this.state.moduleSelected) &&                                      
-                      (selectedStudentProfile.floatingMentorcomments
+                      (student.floatingMentorcomments
                         .filter(mentorComments=>mentorComments.module===this.state.moduleSelected).map(floatingMentor=>{
                         return(
                           <Pane 
@@ -196,7 +261,7 @@ handleComments = (e) => {
                           marginBottom = {10}
                           height="auto" 
                           padding={10}
-                          width= {400}
+                          width= "25em"
                           background="tint2" 
                           borderRadius={3}
                           display="flex"
@@ -212,48 +277,7 @@ handleComments = (e) => {
                        )} ))}
 
          </Pane>
-         <Pane
-          display="flex"
-          height= {320}
-          flexDirection= "column"
-          marginLeft={20}
-          justifyContent = "space-between"
-
-
-
-    >
-        <Heading is="h2">Student Evaluation Summary</Heading>
-
-        <Combobox
-             
-              items={this.state.techSkills.map(s => s.module)}
-              height={38}
-              onChange={selected => this.handleModuleSelection(selected)}
-              placeholder="Select Module"
-              autocompleteProps={{
-              title: "Select Module"
-              }}
-            />
-         <Textarea
-      height={200}
-      width={400}
-      placeholder="Mentor evaluation summary"
-      onChange={e => this.setState({ commentSubmitted: e.target.value })}
-      // value={this.state.mentorComments}
-    />
-    
-              <Button
-                height={38}
-                width={80}
-                appearance="primary"
-                marginTop={10}
-                alignSelf= "flex-end"
-                onClick={this.handleComments}
-              >
-                Submit
-              </Button>
-              </Pane>
-    
+         
       
       </Pane> )}                                   
       </Pane>
@@ -264,10 +288,4 @@ handleComments = (e) => {
     );
   }
 }
-export default FloatingMentor;
-
-
-/*
-
-
-*/
+export default MainMentor;

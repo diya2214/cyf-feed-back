@@ -28,7 +28,16 @@ export const getSkills = () => {
     });
 };
 
-
+export const insertComments = async (student,commentData) => {
+  try {
+    const result = await axios.put(`/api/evaluation/${student}`,  
+    { commentData }
+    )
+    return result
+  } catch (error) {
+    swal("Error", "Could not add your comments", "error");
+  }
+}
 
 export const handleMentor = () => {
   try {
