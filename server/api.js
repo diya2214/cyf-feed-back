@@ -185,7 +185,7 @@ api.get("/skills/tech", (req, res, next) => {
 
 
 // GET SOFT SKILLS
-api.get("/skills/sift", (req, res) => {
+api.get("/skills/soft", (req, res) => {
   const client = getClient();
   client.connect(function () {
     const db = client.db("cyf_feedback");
