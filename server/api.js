@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { getClient } from "./db";
 import { ObjectID } from "mongodb";
-import { async } from "rxjs/internal/scheduler/async";
+
 const api = new Router();
 
 api.get("/", (_, res, next) => {
