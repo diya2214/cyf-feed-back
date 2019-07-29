@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { getClient } from "./db";
 import { ObjectID } from "mongodb";
+import { async } from "rxjs/internal/scheduler/async";
 const api = new Router();
 
 api.get("/", (_, res, next) => {
@@ -31,10 +32,10 @@ api.post("/student", (req, res) => {
   console.log("here", req.body);
   const client = getClient();
 
-  client.connect(function() {
+  client.connect(function () {
     const db = client.db("cyf_feedback");
     const collection = db.collection("student_profile");
-    collection.insertOne(req.body, function(error, result) {
+    collection.insertOne(req.body, function (error, result) {
       res.send(error || result);
       client.close();
     });
@@ -44,17 +45,48 @@ api.post("/student", (req, res) => {
 api.get("/students", (req, res, next) => {
   const client = getClient();
   // const studentName = req.params.name;
-
-  client.connect(function() {
+  client.connect(function () {
     const db = client.db("cyf_feedback");
     const collection = db.collection("student_profile");
-    collection.find({ }).toArray(function(error, result) {
-      console.log(result);
+    collection.find({}).toArray(function (error, result) {
+      // console.log(result);
       res.send(error || result);
       client.close();
     });
   });
 });
+// ADD LEAD MENTORS COMMENTS 
+api.put("/evaluation/:name?", async (req, res) => {
+  console.log('THIS IS INSIDE BODY ', req.body, 'THIS IS PARAMS', req.params)
+  const client = getClient();
+  const comments = req.body.commentData
+
+  client.connect(async function () {
+    const db = client.db("cyf_feedback");
+    const collection = db.collection("student_profile");
+    const result = await collection.findOneAndUpdate(
+      { name: req.params.name },
+      {
+        $addToSet: {
+          leadMentorcomments: [
+            {
+              ...comments,
+              date: new Date(),
+              leadMentorName: 'Neil'
+            }
+          ]
+        }
+      }
+    )
+    console.log(result);
+    client.close();
+    return res.send(result);
+  });
+});
+
+
+
+
 
 //updating comments
 api.put("/updateComments", async (req, res) => {
@@ -90,17 +122,17 @@ api.put("/updateComments", async (req, res) => {
       returnOriginal: false
     };
 
-    
-    const nameStudent= await collection.find({name:name}).toArray()
+
+    const nameStudent = await collection.find({ name: name }).toArray()
     nameStudent[0].floatingMentorcomments.push({
-      id: nameStudent[0].floatingMentorcomments.length+1,
+      id: nameStudent[0].floatingMentorcomments.length + 1,
       comment: floatingmentorcomment,
       floatingmentorName: floatingmentorname,
       date: "31/07/2019",
       module: selectedmodule
     });
     console.log(nameStudent[0].floatingMentorcomments);
-    
+
 
     collection.findOneAndUpdate(
       { name: name },
@@ -108,7 +140,7 @@ api.put("/updateComments", async (req, res) => {
         $set: nameStudent[0]
       },
       options,
-      function(error, result) {
+      function (error, result) {
         if (result.value) {
           res.send(error || result.value);
         } else {
@@ -137,19 +169,34 @@ api.put("/updateComments", async (req, res) => {
 //     })
 //   })
 // })
-// FETCH SKILLS
+// GET SKILLS
 api.get("/skills/tech", (req, res, next) => {
   const client = getClient();
-  client.connect(function() {
+  client.connect(function () {
     const db = client.db("cyf_feedback");
     const collection = db.collection("technical_skills");
-    collection.find({ }).toArray(function(error, result) {
+    collection.find({}).toArray(function (error, result) {
       console.log(result);
       res.send(error || result);
       client.close();
     });
   });
 });
+
+
+// GET SOFT SKILLS
+api.get("/skills/sift", (req, res) => {
+  const client = getClient();
+  client.connect(function () {
+    const db = client.db("cyf_feedback");
+    const collection = db.collection("soft_skills");
+    collection.find({}).toArray(function (error, result) {
+      res.send(error || result);
+      client.close();
+    });
+  });
+});
+
 
 
 

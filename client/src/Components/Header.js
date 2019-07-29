@@ -23,7 +23,7 @@ export default () => (
           }}
         >          
           <h2>
-            Welcome to CYF Feedback </h2>
+          CYF Feedback </h2>
         </Link>
         <Pane
          width="10%" 
@@ -40,7 +40,7 @@ export default () => (
           }}
         >          
           <Heading is="h3">
-            Login </Heading>
+            Maria </Heading>
         </Link> <Text> | </Text>
         <Link
           to={`/`}
