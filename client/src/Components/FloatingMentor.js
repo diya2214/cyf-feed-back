@@ -9,7 +9,8 @@ import {
   Heading,
   Paragraph,
   Text,
-  Strong
+  Strong,
+  Textarea
 } from "evergreen-ui";
 import "../App.css";
 // import mockStudentsProfiles from "../mockStudentsProfiles.json";
@@ -41,6 +42,10 @@ export class FloatingMentor extends Component {
     };
   }
 
+  /**
+   * @todo after submiting the data set the state with new chnages
+   * 
+   */
   /*
          componentWillMount() {
            fetch(`api/student/Ahmet`)
@@ -134,9 +139,11 @@ export class FloatingMentor extends Component {
         console.log("else working");
       }
       const student = await res;
+
       console.log("student:", student);
       this.setState({
-        studentprofile: student
+        studentprofile: student,
+      selectedStudentProfile: selectedStudentProfile
       });
     } catch (err) {
       console.log(err);
@@ -147,7 +154,7 @@ export class FloatingMentor extends Component {
   handleError = () => {
     console.log("handleError working");
     this.setState({
-      errormessage: "Please Choose A Modul by using below dropdown menu"
+      errormessage: "Please Choose A Modul by using above dropdown menu"
     });
   };
 
@@ -161,7 +168,7 @@ export class FloatingMentor extends Component {
   };
 
   render() {
-    console.log("this.state.studentprofile:", this.state.studentprofile);
+    console.log("this.state.studentprofile:", this.state);
     console.log("render working");
 
     //  var selectedStudentProfile = mockStudentsProfiles.filter(s => {
@@ -174,7 +181,7 @@ export class FloatingMentor extends Component {
 
     console.log(this.state.FloatingMentorComments);
     console.log(
-      "this.state.selectedStudentProfile[0]:",
+      "this.state.selectedStudentProfile:",
       this.state.selectedStudentProfile
     );
 
@@ -215,7 +222,7 @@ export class FloatingMentor extends Component {
               }}
             />
           </Pane>
-          {this.state.selectedStudentProfile && (
+          {this.state.selectedStudentProfile !== null && (
             <Pane>
               <Pane height="auto" width={500} float="left">
                 <Avatar
@@ -234,14 +241,14 @@ export class FloatingMentor extends Component {
                 <Table.Body>
                   <Table.Head>
                     <Table.TextCell
-                      flexBasis={200}
+                      flexBasis={100}
                       flexShrink={0}
                       flexGrow={0}
                     >
-                      Student Name:
+                      Name:
                     </Table.TextCell>
                     <Table.TextCell
-                      flexBasis={200}
+                      flexBasis={100}
                       flexShrink={0}
                       flexGrow={0}
                     >
@@ -252,37 +259,54 @@ export class FloatingMentor extends Component {
                   <Table.Body>
                     <Table.Row>
                       <Table.TextCell
-                        flexBasis={200}
+                        flexBasis={100}
                         flexShrink={0}
                         flexGrow={0}
                       >
-                        Students Soft Skill:
+                        Class:
                       </Table.TextCell>
                       <Table.TextCell>
                         {this.state.selectedStudentProfile &&
-                          this.state.selectedStudentProfile.softSkills}
+                          this.state.selectedStudentProfile.class}
                       </Table.TextCell>
                     </Table.Row>
                     <Table.Row>
                       <Table.TextCell
-                        flexBasis={200}
+                        flexBasis={100}
                         flexShrink={0}
                         flexGrow={0}
                       >
-                        Students Tech Skill:
+                        Soft Skills:
                       </Table.TextCell>
                       <Table.TextCell>
                         {this.state.selectedStudentProfile &&
-                          this.state.selectedStudentProfile.techinalSkills}
+                          this.state.selectedStudentProfile.softSkills.join(
+                            ", "
+                          )}
                       </Table.TextCell>
                     </Table.Row>
                     <Table.Row>
                       <Table.TextCell
-                        flexBasis={200}
+                        flexBasis={100}
                         flexShrink={0}
                         flexGrow={0}
                       >
-                        Timeline:
+                        Tech Skills:
+                      </Table.TextCell>
+                      <Table.TextCell>
+                        {this.state.selectedStudentProfile &&
+                          this.state.selectedStudentProfile.techinalSkills.join(
+                            ", "
+                          )}
+                      </Table.TextCell>
+                    </Table.Row>
+                    <Table.Row>
+                      <Table.TextCell
+                        flexBasis={100}
+                        flexShrink={0}
+                        flexGrow={0}
+                      >
+                        Calender:
                       </Table.TextCell>
                       <Table.TextCell>
                         {this.state.selectedStudentProfile && (
@@ -290,14 +314,14 @@ export class FloatingMentor extends Component {
                             target="_blank"
                             href="https://tinyurl.com/CYF-LDN5CALENDAR"
                           >
-                            CYF London-5 Class Timeline
+                            CYF London-5 Class Calender
                           </a>
                         )}
                       </Table.TextCell>
                     </Table.Row>
                     <Table.Row>
                       <Table.TextCell
-                        flexBasis={200}
+                        flexBasis={100}
                         flexShrink={0}
                         flexGrow={0}
                       >
@@ -318,105 +342,105 @@ export class FloatingMentor extends Component {
                 </Table.Body>
               </Pane>
 
-              <Pane height={500} width={500} float="left">
+              <Pane
+                width="auto"
+                height="auto"
+                marginLeft={40}
+                padding={10}
+                display="flex"
+                flexDirection="column"
+                justifyContent="space-between"
+                borderRadius={3}
+                background="blueTint"
+              >
+                <Heading>Current Session's Comment:</Heading>
+                <br />
                 <Pane
-                  width="auto"
-                  height="auto"
-                  marginLeft={40}
+                  elevation={3}
+                  marginLeft={36}
+                  marginBottom={10}
+                  height={100}
                   padding={10}
+                  width={400}
+                  background="tint2"
+                  borderRadius={3}
                   display="flex"
                   flexDirection="column"
-                  justifyContent="space-between"
-                  borderRadius={3}
-                  background="blueTint"
                 >
-                  <Heading>Current Session's Comment:</Heading>
-                  <br />
-                  <Pane
-                    elevation={3}
-                    marginLeft={36}
-                    marginBottom={10}
-                    height={100}
-                    padding={10}
-                    width={400}
-                    background="tint2"
-                    borderRadius={3}
-                  >
-                    <strong style={submitStyle}>
-                      {this.state.selectedStudentProfile &&
-                        this.state.FloatingMentorComments}
-                    </strong>
-                    {this.state.FloatingMentorComments && (
-                      <div>
-                        <br /> by {selectedFloatingMentorName} <br />
-                      </div>
-                    )}
-                  </Pane>
-                </Pane>
-
-                <Pane
-                  width="auto"
-                  height="auto"
-                  marginLeft={40}
-                  padding={10}
-                  display="flex"
-                  flexDirection="column"
-                  justifyContent="space-between"
-                  borderRadius={3}
-                  background="blueTint"
-                >
-                  <Heading>
-                    Previous Comments about{" "}
-                    <strong>
-                      {this.state.selectedStudentProfile &&
-                        this.state.selectedStudentProfile.name}
-                    </strong>{" "}
-                    writen by Irregular Mentor (
-                    <strong>{selectedFloatingMentorName}</strong>
-                    ):
-                  </Heading>
-                  {console.log(
-                    "selectedStudentProfile[0] result=>",
-                    this.state.selectedStudentProfile.floatingMentorcomments
+                  <strong style={submitStyle}>
+                    {this.state.selectedStudentProfile &&
+                      this.state.FloatingMentorComments}
+                  </strong>
+                  {this.state.FloatingMentorComments && (
+                    <div>
+                      <br /> by {selectedFloatingMentorName} <br />
+                    </div>
                   )}
-                  {this.state.selectedStudentProfile
-                    ? this.state.selectedStudentProfile.floatingMentorcomments.map(
-                        s => {
-                          if (
-                            s.floatingMentorName ===
-                            selectedFloatingMentorName
-                          )
-                            return (
-                              <Pane
-                                elevation={3}
-                                marginLeft={36}
-                                marginBottom={10}
-                                height="auto"
-                                padding={10}
-                                width={400}
-                                background="tint2"
-                                borderRadius={3}
-                              >
-                                <Paragraph marginTop="default">
-                                  {s.comment}
-                                </Paragraph>
-                                <Text padding={100}>
-                                  <Strong>Feedback by </Strong>
-                                  {s.floatingMentorName} on {s.date} <br />
-                                  <Text padding={100}>
-                                    {" "}
-                                    <strong> Module: </strong> {s.module}{" "}
-                                  </Text>
-                                </Text>
-                              </Pane>
-                            );
-                          else return "";
-                        }
-                      )
-                    : null}
                 </Pane>
               </Pane>
-              <Pane>
+
+              <Pane
+                width="auto"
+                height="auto"
+                marginLeft={40}
+                padding={10}
+                display="flex"
+                flexDirection="column"
+                justifyContent="space-between"
+                background="blueTint"
+              >
+                <Heading>
+                  Previous Comments about{" "}
+                  {this.state.selectedStudentProfile.name} writen by Irregular
+                  Mentor:
+                </Heading>
+                {console.log(
+                  "selectedStudentProfile result=>",
+                  this.state.selectedStudentProfile.floatingMentorcomments
+                )}
+                {this.state.selectedStudentProfile
+                  ? this.state.selectedStudentProfile.floatingMentorcomments.map(
+                      s => {
+                        if (
+                          s.floatingMentorName ===
+                          selectedFloatingMentorName
+                        )
+                          return (
+                            <Pane
+                              elevation={3}
+                              marginLeft={36}
+                              marginBottom={10}
+                              height="auto"
+                              padding={10}
+                              width={400}
+                              background="tint2"
+                              borderRadius={3}
+                            >
+                              <Paragraph marginTop="default">
+                                {s.comment}
+                              </Paragraph>
+                              <Text padding={100}>
+                                <Strong>Feedback by </Strong>
+                                {s.floatingMentorName} on {s.date} <br />
+                                <Text padding={100}>
+                                  {" "}
+                                  <strong> Module: </strong> {s.module}{" "}
+                                </Text>
+                              </Text>
+                            </Pane>
+                          );
+                        else return "";
+                      }
+                    )
+                  : null}
+              </Pane>
+              <Pane
+                display="flex"
+                height={120}
+                flexDirection="column"
+                marginLeft={10}
+                justifyContent="space-between"
+              >
                 <Combobox
                   items={this.state.techSkills.map(s => s.module)}
                   height={38}
@@ -429,11 +453,9 @@ export class FloatingMentor extends Component {
                   }}
                 />
                 <h3 style={h3Style}> {this.state.errormessage}</h3>
-                <TextInput
-                  width="100%"
-                  height={48}
-                  alignItems="right"
-                  width={800}
+                <Textarea
+                  height={200}
+                  width={400}
                   placeholder="Irregular Mentor's Comments..."
                   onChange={e =>
                     this.setState({
@@ -441,10 +463,13 @@ export class FloatingMentor extends Component {
                     })
                   }
                 />
+
                 <Button
-                  height={48}
+                  height={40}
+                  width={80}
+                  marginBottom={-20}
                   appearance="primary"
-                  marginLeft={30}
+                  alignSelf="flex-end"
                   onClick={this.handyComments}
                 >
                   Submit
