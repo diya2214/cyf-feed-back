@@ -368,23 +368,20 @@ export class FloatingMentor extends Component {
                   )}
                 </Pane>
 
+                <Heading marginBottom={10} marginLeft={20} marginTop={20}>
+                  {" "}
+                  <strong>
+                    Previous Comments about{" "}
+                    {this.state.selectedStudentProfile.name}:
+                  </strong>
+                </Heading>
                 <Pane
                   style={scrolling}
                   width="auto"
                   height={400}
-                  marginLeft={10}
-                  padding={10}
-                  display="flex"
-                  flexDirection="column"
-                  justifyContent="space-between"
+                  marginLeft={20}
+                  marginTop={10}
                 >
-                  <Heading marginBottom={10}>
-                    {" "}
-                    <strong>
-                      Previous Comments about{" "}
-                      {this.state.selectedStudentProfile.name}:
-                    </strong>
-                  </Heading>
                   <Pane>
                     {this.state.selectedStudentProfile !== null
                       ? this.state.selectedStudentProfile.floatingMentorcomments.map(
