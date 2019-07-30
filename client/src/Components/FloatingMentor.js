@@ -154,7 +154,7 @@ export class FloatingMentor extends Component {
   handleError = () => {
     console.log("handleError working");
     this.setState({
-      errormessage: "Please Choose A Modul by using above dropdown menu"
+      errormessage: "Please choose a modul by using above dropdown menu."
     });
   };
 
@@ -171,50 +171,39 @@ export class FloatingMentor extends Component {
     console.log("this.state.studentprofile:", this.state);
     console.log("render working");
 
-    //  var selectedStudentProfile = mockStudentsProfiles.filter(s => {
-    //    return s.name === this.state.clickedStudent;
-    //  /});
-
-    // this.setState({
-    //  clickedStudent: this.state.selectedStudentProfile
-    // });
-
-    console.log(this.state.FloatingMentorComments);
-    console.log(
-      "this.state.selectedStudentProfile:",
-      this.state.selectedStudentProfile
-    );
-
     const studentsProfile = this.state.studentsProfile;
     const selectedStudentProfile = this.state.selectedStudentProfile;
     return (
       <div>
         <Pane
           // key={index}
+          // key={index}
           elevation={4}
-          height="auto"
+          height="100%"
           width="auto"
           padding={20}
-          position="center"
           display="flex"
           flexWrap="wrap"
-          alignItems="center"
+          justifyContent="space-around"
           borderRadius={3}
           border="default"
-          background="blueTint"
         >
           <Pane
             width="100%"
             height="100%"
             display="flex"
-            alignItems="center"
-            justifyContent="center"
+            flexDirection="column"
+            justifyContent="space-around"
+            padding={20}
+            background="orangeTint"
           >
+            <Heading is="h2">Select student</Heading>
+
             <Combobox
               // studentsProfile.map(s => s.name)
 
               items={studentsProfile.map(s => s.name)}
-              height={48}
+              height={34}
               onChange={selected => this.handyStudent(selected)}
               placeholder="Students"
               autocompleteProps={{
@@ -223,8 +212,15 @@ export class FloatingMentor extends Component {
             />
           </Pane>
           {this.state.selectedStudentProfile !== null && (
-            <Pane>
-              <Pane height="auto" width={500} float="left">
+            <Pane display="flex" marginTop={10}>
+              <Pane
+                elevation={2}
+                borderRadius={5}
+                height={450}
+                width={500}
+                dislay="flex"
+                background="tint1"
+              >
                 <Avatar
                   src={
                     this.state.selectedStudentProfile
@@ -236,7 +232,7 @@ export class FloatingMentor extends Component {
                       ? this.state.selectedStudentProfile.name
                       : null
                   }
-                  size={80}
+                  size={85}
                 />
                 <Table.Body>
                   <Table.Head>
@@ -345,19 +341,19 @@ export class FloatingMentor extends Component {
               <Pane
                 width="auto"
                 height="auto"
-                marginLeft={40}
+                marginLeft={6}
                 padding={10}
                 display="flex"
                 flexDirection="column"
-                justifyContent="space-between"
+                justifyContent="space-around"
                 borderRadius={3}
-                background="blueTint"
               >
-                <Heading>Current Session's Comment:</Heading>
-                <br />
+                <Heading marginLeft={10} marginBottom={10}>
+                  Current Comment:
+                </Heading>
                 <Pane
                   elevation={3}
-                  marginLeft={36}
+                  marginLeft={10}
                   marginBottom={10}
                   height={100}
                   padding={10}
@@ -377,103 +373,119 @@ export class FloatingMentor extends Component {
                     </div>
                   )}
                 </Pane>
-              </Pane>
 
+                <Pane
+                  width="auto"
+                  height="auto"
+                  marginLeft={10}
+                  padding={10}
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="space-between"
+                >
+                  <Heading marginBottom={10}>
+                    Previous Comments about{" "}
+                    {this.state.selectedStudentProfile.name}
+                  </Heading>
+
+                  {this.state.selectedStudentProfile !== null
+                    ? this.state.selectedStudentProfile.floatingMentorcomments.map(
+                        s => {
+                          if (
+                            s.floatingMentorName ===
+                            selectedFloatingMentorName
+                          )
+                            return (
+                              <Pane
+                                elevation={3}
+                                marginLeft={2}
+                                marginBottom={12}
+                                height="auto"
+                                padding={5}
+                                width={400}
+                                background="tint2"
+                                display="flex"
+                                flexDirection="column"
+                                borderRadius={3}
+                              >
+                                <Paragraph marginTop="default">
+                                  {s.comment}
+                                </Paragraph>
+                                <Text padding={8} alignSelf="flex-end">
+                                  <Strong>Feedback by </Strong>
+                                  {s.floatingMentorName} on {s.date} <br />
+                                  <Text padding={8}>
+                                    {" "}
+                                    <strong> Module: </strong> {s.module}{" "}
+                                  </Text>
+                                </Text>
+                              </Pane>
+                            );
+                          else return "";
+                        }
+                      )
+                    : null}
+                </Pane>
+              </Pane>
               <Pane
                 width="auto"
-                height="auto"
-                marginLeft={40}
+                height="100%"
+                marginLeft={20}
                 padding={10}
                 display="flex"
-                flexDirection="column"
-                justifyContent="space-between"
-                background="blueTint"
+                // flexDirection= "column"
+                justifyContent="space-around"
+                borderRadius={3}
+                elevation={2}
+                background="tint1"
               >
-                <Heading>
-                  Previous Comments about{" "}
-                  {this.state.selectedStudentProfile.name} writen by Irregular
-                  Mentor:
-                </Heading>
-                {console.log(
-                  "selectedStudentProfile result=>",
-                  this.state.selectedStudentProfile.floatingMentorcomments
-                )}
-                {this.state.selectedStudentProfile
-                  ? this.state.selectedStudentProfile.floatingMentorcomments.map(
-                      s => {
-                        if (
-                          s.floatingMentorName ===
-                          selectedFloatingMentorName
-                        )
-                          return (
-                            <Pane
-                              elevation={3}
-                              marginLeft={36}
-                              marginBottom={10}
-                              height="auto"
-                              padding={10}
-                              width={400}
-                              background="tint2"
-                              borderRadius={3}
-                            >
-                              <Paragraph marginTop="default">
-                                {s.comment}
-                              </Paragraph>
-                              <Text padding={100}>
-                                <Strong>Feedback by </Strong>
-                                {s.floatingMentorName} on {s.date} <br />
-                                <Text padding={100}>
-                                  {" "}
-                                  <strong> Module: </strong> {s.module}{" "}
-                                </Text>
-                              </Text>
-                            </Pane>
-                          );
-                        else return "";
-                      }
-                    )
-                  : null}
-              </Pane>
-              <Pane
-                display="flex"
-                height={120}
-                flexDirection="column"
-                marginLeft={10}
-                justifyContent="space-between"
-              >
-                <Combobox
-                  items={this.state.techSkills.map(s => s.module)}
-                  height={38}
-                  onChange={selected =>
-                    this.handleModuleSelection(selected)
-                  }
-                  placeholder="Select Module"
-                  autocompleteProps={{
-                    title: "Select Module"
-                  }}
-                />
-                <h3 style={h3Style}> {this.state.errormessage}</h3>
-                <Textarea
-                  height={200}
-                  width={400}
-                  placeholder="Irregular Mentor's Comments..."
-                  onChange={e =>
-                    this.setState({
-                      commentSubmitted: e.target.value
-                    })
-                  }
-                />
-
-                <Button
-                  height={40}
-                  width={80}
-                  marginBottom={-20}
-                  appearance="primary"
-                  alignSelf="flex-end"
-                  onClick={this.handyComments}
+                <Pane
+                  display="flex"
+                  height={350}
+                  flexDirection="column"
+                  marginLeft={10}
+                  justifyContent="space-between"
                 >
-                  Submit
-                </Button>
+                  <Heading marginLeft={10} marginBottom={10}>
+                    Leave Feedback:
+                  </Heading>
+                  <Combobox
+                    items={this.state.techSkills.map(s => s.module)}
+                    height={34}
+                    onChange={selected =>
+                      this.handleModuleSelection(selected)
+                    }
+                    placeholder="Select Module"
+                    autocompleteProps={{
+                      title: "Select Module"
+                    }}
+                  />
+                  <Heading color="#FF0000">
+                    {" "}
+                    {this.state.errormessage}
+                  </Heading>
+                  <Textarea
+                    height={200}
+                    width={400}
+                    placeholder="Irregular Mentor's Comments..."
+                    onChange={e =>
+                      this.setState({
+                        commentSubmitted: e.target.value
+                      })
+                    }
+                  />
+
+                  <Button
+                    height={40}
+                    width={80}
+                    marginBottom={-20}
+                    appearance="primary"
+                    alignSelf="flex-end"
+                    onClick={this.handyComments}
+                  >
+                    Submit
+                  </Button>
+                </Pane>
               </Pane>
             </Pane>
           )}
