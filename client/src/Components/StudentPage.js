@@ -2,19 +2,35 @@ import React, { Component } from "react";
 import { majorScale, Button, Heading, Pane, TextInputField, FilePicker, Combobox } from 'evergreen-ui';
 // import { Link } from 'react-router-dom';
 import "../App.css";
+import {getSkills, getSoftSkills} from "./Api.js"
 
 // export default testPage = () => <div>hi</div>
 export default class StudentPage extends Component {
 
   state = {
     name: null,
-    photo: null,
-    techSkill: null,
-    softSkill: null,
-    allTechSkills: [],
-    allSoftSkills: []
+    studentPhoto: null,
+    oneTechSkill: null,
+    oneSoftSkill: null,
+    softSkills: [],
+    techinalSkills:[],
+    inputSoftSkills:[],
+    getTechSkills:[],
+    submitMessage: null
   }
 
+  componentDidMount = async () => {
+    const inputSoftSkills = await getSoftSkills();
+    const getTechSkills = await getSkills();
+    this.setState({
+      inputSoftSkills: inputSoftSkills,
+      getTechSkills: getTechSkills 
+     
+    })  
+    // console.log(this.state.getTechSkills)
+    // console.log(this.state.getSoftSkills)
+  } 
+  
   handleFullName = (e) => {
     let value = e.target.value;
     this.setState({ name: value })
@@ -22,15 +38,14 @@ export default class StudentPage extends Component {
 
   handleFile = (file) => {
     this.setState({
-    photo: file[0].name
+    studentPhoto: file[0].name
     })
-
   }
 
   handleTech = (selected) => {
     if (selected !== "None"){
       this.setState({
-        techSkill: selected
+        oneTechSkill: selected
        })
     }
    }
@@ -38,17 +53,26 @@ export default class StudentPage extends Component {
    handleSoft = (selected) =>{
     if (selected !== "None"){
     this.setState({
-      softSkill: selected
+      oneSoftSkill: selected
      })
     }
    }
 
+   handleSubmitMessage = (e) => {
+    const profilemessage = "Your Profile has been submitted!"
+    this.setState({
+      submitMessage: profilemessage 
+    })
+    console.log(this.state.submitMessage);
+  }
+
+
    handleClickTech = () => {
-     const { allTechSkills, techSkill} = this.state
-     if (techSkill !== "None"){
-      allTechSkills.push(techSkill)
+     const { techinalSkills, oneTechSkill} = this.state
+     if (oneTechSkill!== "None"){
+      techinalSkills.push(oneTechSkill)
       this.setState({
-        allTechSkills: allTechSkills
+        techinalSkills: techinalSkills
       })
      }else{
       return
@@ -56,21 +80,35 @@ export default class StudentPage extends Component {
    }
 
    handleClickSoft = () => {
-    const { allSoftSkills, softSkill} = this.state
-     if (softSkill !== "None"){
-      allSoftSkills.push(softSkill)
+    const { softSkills, oneSoftSkill} = this.state
+     if (oneSoftSkill !== "None"){
+      softSkills.push(oneSoftSkill)
        this.setState({
-        allSoftSkills: allSoftSkills
+        softSkills: softSkills
    })
     } else {
       return
     }
     }
-
+   
+    handleClearForm = (e) => {
+      this.setState({
+          name: null,
+          studentPhoto: null,
+          oneTechSkill: null,
+          oneSoftSkill: null,
+          softSkills: [],
+          techinalSkills:[]      
+      })
+      console.log("form cleared")
+    }
+  
     handleSubmit = async (e) => {
      e.preventDefault();
-      const { name, photo, allTechSkills, allSoftSkills } = this.state;
-       console.log(allSoftSkills)  
+      const { name, studentPhoto, techinalSkills, softSkills } = this.state;
+      //  console.log(softSkills)  
+      //  console.log(techinalSkills)
+      //  console.log(name)
          await fetch("/api/student", {
          method: 'POST',
          headers:{
@@ -79,16 +117,18 @@ export default class StudentPage extends Component {
   },
          body:JSON.stringify({
          name: name,
-         photo: photo,
-         allSoftSkills: allSoftSkills,
-         allTechSkills: allTechSkills
+         studentPhoto: studentPhoto,
+         softSkills: softSkills,
+         techinalSkills: techinalSkills
   })
 }).then(response => {
-    response.json().then(data => {
-      console.log("Successful" + data);
+    response.json().then(response=> {
+      console.log("Successful" + response);
   });
   })
+  
   }
+  
 
   render() {
     return (
@@ -98,7 +138,7 @@ export default class StudentPage extends Component {
         </div>
       <Pane
          // key={index}
-         marginLeft={60}
+         marginLeft={157}
          elevation={4}
          width="75%"
          padding={16}
@@ -116,6 +156,7 @@ export default class StudentPage extends Component {
          placeholder="Full Name"
          onChange={(e) => this.handleFullName(e)}
           />
+          
       <Pane>
         <Heading size={500}>Upload your photo here:</Heading>
         {/* <h5>Upload your photo here:</h5> */}
@@ -134,7 +175,8 @@ export default class StudentPage extends Component {
               <Combobox
                 width="95%"
                 height={40}
-                items={['Arrays', 'Functions', 'Array Methods', 'Objects', 'None']}
+                items={this.state.getTechSkills.map(skills => skills.module)}
+                // items={['Arrays', 'Functions', 'Array Methods', 'Objects', 'None']}
                 onChange={selected => this.handleTech(selected)}
                 placeholder="Tech Skills"
                 label="Tech Skills"
@@ -146,7 +188,7 @@ export default class StudentPage extends Component {
               <Button height={40} onClick={this.handleClickTech} appearance="primary">Add</Button>
               </div>
               <Pane>
-              <p>{this.state.allTechSkills.toString()}</p>
+              <p>{this.state.techinalSkills.toString()}</p>
               
               
               <Heading size={500}>Select the Soft Skills you're working on</Heading>
@@ -156,7 +198,8 @@ export default class StudentPage extends Component {
                 <Combobox
                   width="95%"
                   height={40}
-                  items={['Participating in my class', 'Supporting my class', 'Solving problems 1', 'Solving problems 2', 'None']}
+                  items={this.state.inputSoftSkills.map(skills => skills.module)}
+                  // items={['Participating in my class', 'Supporting my class', 'Solving problems 1', 'Solving problems 2', 'None']}
                   onChange={selected => this.handleSoft(selected)}
                   placeholder="Soft Skills"
                   label="Soft Skills"
@@ -169,15 +212,36 @@ export default class StudentPage extends Component {
                 onClick={this.handleClickSoft} 
                 appearance="primary">Add</Button>
                 </div>
-                <Pane><p>{this.state.allSoftSkills.toString()}</p></Pane>
+                <Pane><p>{this.state.softSkills.toString()}</p></Pane>
+                <Pane>
+                 <Heading size={500}>Select your class</Heading>
+                <Combobox
+                width="55%"
+                height={40}
+                items={['London Class 5', 'Scotland Class 2', 'Manchester Class 2']}
+                placeholder="Student's Class"
+                label="Class"
+                autocompleteProps={{
+                  // Used for the title in the autocomplete.
+                  title: "none"
+                }}
+              />
+              </Pane>
+
                </Pane>
             </Pane>
           </Pane>
           <Button 
           type="submit" 
-          onClick={this.handleSubmit} 
+          onClick={(e) => {
+            this.handleSubmit(e)
+            this.handleSubmitMessage(e)
+            this.handleClearForm(e)}}
+           
           appearance="primary" height={majorScale(5)} 
           marginTop={16}> SUBMIT PROFILE</Button>
+         <Pane><p>{this.state.submitMessage}</p></Pane> 
+
         </Pane>
       </div>
     );
