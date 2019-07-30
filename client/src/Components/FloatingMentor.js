@@ -15,11 +15,12 @@ import {
 import "../App.css";
 // import mockStudentsProfiles from "../mockStudentsProfiles.json";
 import {getStudents, getSkills} from "./Api";
+import { ThemeConsumer } from "evergreen-ui/commonjs/theme";
 
 const selectedFloatingMentorName = "Maria";
 
-const h3Style = {
-  color: "red"
+const scrolling = {
+  overflow: "auto"
 };
 
 const submitStyle = {
@@ -116,8 +117,10 @@ export class FloatingMentor extends Component {
           });
     }
 
-    console.log("moduleSelected , name, floatingmentorcomment");
-    try {
+  
+     
+     if (this.state.moduleSelected !== null) {
+     try {
       const res = await fetch("api/updateComments", {
         method: "PUT",
         headers: {
@@ -148,7 +151,7 @@ export class FloatingMentor extends Component {
     } catch (err) {
       console.log(err);
     }
-    
+  }
   };
 
   handleError = () => {
@@ -216,7 +219,7 @@ export class FloatingMentor extends Component {
               <Pane
                 elevation={2}
                 borderRadius={5}
-                height={450}
+                height={400}
                 width={500}
                 dislay="flex"
                 background="tint1"
@@ -338,22 +341,13 @@ export class FloatingMentor extends Component {
                 </Table.Body>
               </Pane>
 
-              <Pane
-                width="auto"
-                height="auto"
-                marginLeft={6}
-                padding={10}
-                display="flex"
-                flexDirection="column"
-                justifyContent="space-around"
-                borderRadius={3}
-              >
-                <Heading marginLeft={10} marginBottom={10}>
-                  Current Comment:
+              <Pane>
+                <Heading marginLeft={20} marginBottom={10}>
+                  <strong> Current Comment:</strong>
                 </Heading>
                 <Pane
                   elevation={3}
-                  marginLeft={10}
+                  marginLeft={20}
                   marginBottom={10}
                   height={100}
                   padding={10}
@@ -375,8 +369,9 @@ export class FloatingMentor extends Component {
                 </Pane>
 
                 <Pane
+                  style={scrolling}
                   width="auto"
-                  height="auto"
+                  height={400}
                   marginLeft={10}
                   padding={10}
                   display="flex"
@@ -384,52 +379,57 @@ export class FloatingMentor extends Component {
                   justifyContent="space-between"
                 >
                   <Heading marginBottom={10}>
-                    Previous Comments about{" "}
-                    {this.state.selectedStudentProfile.name}
+                    {" "}
+                    <strong>
+                      Previous Comments about{" "}
+                      {this.state.selectedStudentProfile.name}:
+                    </strong>
                   </Heading>
-
-                  {this.state.selectedStudentProfile !== null
-                    ? this.state.selectedStudentProfile.floatingMentorcomments.map(
-                        s => {
-                          if (
-                            s.floatingMentorName ===
-                            selectedFloatingMentorName
-                          )
-                            return (
-                              <Pane
-                                elevation={3}
-                                marginLeft={2}
-                                marginBottom={12}
-                                height="auto"
-                                padding={5}
-                                width={400}
-                                background="tint2"
-                                display="flex"
-                                flexDirection="column"
-                                borderRadius={3}
-                              >
-                                <Paragraph marginTop="default">
-                                  {s.comment}
-                                </Paragraph>
-                                <Text padding={8} alignSelf="flex-end">
-                                  <Strong>Feedback by </Strong>
-                                  {s.floatingMentorName} on {s.date} <br />
-                                  <Text padding={8}>
-                                    {" "}
-                                    <strong> Module: </strong> {s.module}{" "}
+                  <Pane>
+                    {this.state.selectedStudentProfile !== null
+                      ? this.state.selectedStudentProfile.floatingMentorcomments.map(
+                          s => {
+                            if (
+                              s.floatingMentorName ===
+                              selectedFloatingMentorName
+                            )
+                              return (
+                                <Pane
+                                  elevation={3}
+                                  marginLeft={2}
+                                  marginBottom={12}
+                                  height="auto"
+                                  padding={5}
+                                  width={400}
+                                  background="tint2"
+                                  display="flex"
+                                  flexDirection="column"
+                                  borderRadius={3}
+                                >
+                                  <Paragraph marginTop="default">
+                                    {s.comment}
+                                  </Paragraph>
+                                  <Text padding={8} alignSelf="flex-end">
+                                    <Strong>Feedback by </Strong>
+                                    {s.floatingMentorName} on {s.date}{" "}
+                                    <br />
+                                    <Text padding={8}>
+                                      {" "}
+                                      <strong> Module: </strong> {s.module}{" "}
+                                    </Text>
                                   </Text>
-                                </Text>
-                              </Pane>
-                            );
-                          else return "";
-                        }
-                      )
-                    : null}
+                                </Pane>
+                              );
+                            else return "";
+                          }
+                        )
+                      : null}
+                  </Pane>
                 </Pane>
               </Pane>
               <Pane
                 width="auto"
-                height="100%"
+                height="75%"
                 marginLeft={20}
                 padding={10}
                 display="flex"
@@ -447,7 +447,7 @@ export class FloatingMentor extends Component {
                   justifyContent="space-between"
                 >
                   <Heading marginLeft={10} marginBottom={10}>
-                    Leave Feedback:
+                    <strong> Leave Feedback:</strong>
                   </Heading>
                   <Combobox
                     items={this.state.techSkills.map(s => s.module)}
