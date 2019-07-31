@@ -84,10 +84,6 @@ api.put("/evaluation/:name?", async (req, res) => {
   });
 });
 
-
-
-
-
 //updating comments
 api.put("/updateComments", async (req, res) => {
   console.log("update endpoint is starting");

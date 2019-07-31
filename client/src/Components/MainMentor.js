@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import "../App.css";
-// import mockStudentsProfiles from "../mockStudentsProfiles.json";
+import swal from "sweetalert";
 import { getStudents, getSkills, insertComments } from "./Api"
+import moment from "moment"
+
 
 import {
   Button, 
@@ -26,6 +28,7 @@ export class MainMentor extends Component {
       techSkills: null,
       mentorComments: ' ',
       commentSubmitted: null,
+      moduleSelectionMsg:null,
       student: null 
 
     };
@@ -43,7 +46,8 @@ export class MainMentor extends Component {
   handleModuleSelection= selected => {
     this.setState({
       moduleSelected: selected,
-      mentorComments: null
+      mentorComments: null,
+      moduleSelectionMsg: null
     });
   };
 
@@ -60,14 +64,18 @@ export class MainMentor extends Component {
   };
 
 handleComments = (e) => {
-  const commentData={comments:this.state.commentSubmitted,
-  module: this.state.moduleSelected}
-  insertComments(this.state.student.name,commentData)
-  this.setState({
-    mentorComments: this.state.commentSubmitted,
-    commentSubmitted: null
-
-  })
+  if(this.state.moduleSelected === null){    
+    this.setState({moduleSelectionMsg : 'Please choose a module by using above dropdown menu'})
+    return
+}
+   const commentData={comments:this.state.commentSubmitted,
+      module: this.state.moduleSelected}
+      insertComments(this.state.student.name,commentData)
+      this.setState({
+        mentorComments: this.state.commentSubmitted,
+        commentSubmitted: null,
+        moduleSelectionMsg: null
+       })
 };
 
   render() {
@@ -186,12 +194,10 @@ handleComments = (e) => {
               Evaluation Summary:
               </Table.TextCell >
               </Table.Row>
-              {/* <Table.Row height="auto" paddingY={12}> */}
               <Paragraph>
                 {student &&
                   this.state.mentorComments}
                   </Paragraph>
-            {/* </Table.Row> */}
             </Table.Body>
             </Table.Body>
 
@@ -228,6 +234,10 @@ handleComments = (e) => {
               title: "Select Module"
               }}
             />
+            <Heading color="#FF0000">
+                    {" "}
+                    {this.state.moduleSelectionMsg}
+                  </Heading>
          <Textarea
           height={200}
           width={400}
@@ -271,7 +281,7 @@ handleComments = (e) => {
                             {floatingMentor.comment}
                             </Paragraph>
                             <Text padding={10} alignSelf= "flex-end"> 
-                              <Strong> By </Strong> {floatingMentor.floatingMentorName} <Strong>on</Strong> {floatingMentor.date}</Text>
+                              <Strong> By </Strong> {floatingMentor.floatingMentorName} <Strong>on</Strong> {moment(floatingMentor.date).format("Do MMMM  YYYY")}</Text>
                             </Pane>
 
                        )} ))}
