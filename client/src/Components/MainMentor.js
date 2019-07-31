@@ -17,6 +17,9 @@ import {
   Textarea,
   
   Paragraph } from "evergreen-ui"
+  const scrolling = {
+    overflow: "auto"
+  };
 
 export class MainMentor extends Component {
   constructor(props) {
@@ -257,7 +260,11 @@ handleComments = (e) => {
               </Button>
               </Pane >
                 </Pane>
-                <Pane marginLeft={20} width="25em">
+                <Pane 
+                style={scrolling}
+                marginLeft={20} 
+                width="28em"
+                height = {400}>
                 <Heading is="h2">Mentors Comments: </Heading>
 
               {/* {console.log(this.state.moduleSelected)} */}

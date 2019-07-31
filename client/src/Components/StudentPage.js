@@ -158,13 +158,13 @@ export default class StudentPage extends Component {
                        </div>
                        <Pane
                          // key={index}
-                         marginLeft={157}
+                         marginLeft={195}
                          elevation={4}
                          width="75%"
                          padding={16}
                          borderRadius={3}
                          border="default"
-                         background="blueTint"
+                         background="tint1"
                        >
                          <Heading size={500}>Full Name</Heading>
                          <TextInputField

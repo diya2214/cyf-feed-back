@@ -124,7 +124,7 @@ api.put("/updateComments", async (req, res) => {
       id: nameStudent[0].floatingMentorcomments.length + 1,
       comment: floatingmentorcomment,
       floatingMentorName: floatingMentorName,
-      date: "28/07/2019",
+      date: new Date(),
       module: selectedmodule
     });
     console.log(nameStudent[0].floatingMentorcomments);
