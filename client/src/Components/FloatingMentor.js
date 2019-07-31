@@ -3,7 +3,6 @@ import {
   Button,
   Pane,
   Combobox,
-  TextInput,
   Table,
   Avatar,
   Heading,
@@ -41,31 +40,6 @@ export class FloatingMentor extends Component {
       techSkills: null
     };
   }
-
-  /**
-   * @todo after submiting the data set the state with new chnages
-   * 
-   */
-  /*
-         componentWillMount() {
-           fetch(`api/student/Ahmet`)
-             .then(res => res.json())
-             .then(student => {
-               console.log(student);
-             });
-         }
-  
-         handyComments = e => {
-           console.log("handyComments working");
-           {
-             this.state.moduleSelected === null
-               ? this.handleError()
-               : this.setState({
-                   FloatingMentorComments: this.state.commentSubmitted
-                 });
-           }};
-         */
-
   componentDidMount = async () => {
     const studentsProfile = await getStudents();
     const techSkills = await getSkills();
@@ -87,27 +61,10 @@ export class FloatingMentor extends Component {
       selectedStudentProfile: selectedStudentProfile
     });
 
-    //    const selectedStudentProfile = await getStudent(selected);
-
-  //  this.setState({
-  //    selectedStudentProfile: await getStudents(selected)
-  //  });
-    console.log("this.state.selectedStudentProfile:");
-    console.log(this.state.selectedStudentProfile);
-  };
+     };
 
   handyComments = async e => {
     e.preventDefault();
-    console.log("handyComments working");
-
-    /*
-    const {
-      clickedStudent,
-      floatingmentorcomment,
-      moduleSelected
-    } = this.state;
-   */
-
     {
       this.state.moduleSelected === null
         ? this.handleError()
@@ -116,8 +73,7 @@ export class FloatingMentor extends Component {
           });
     }
 
-    console.log("moduleSelected , name, floatingmentorcomment");
-    try {
+   try {
       const res = await fetch("api/updateComments", {
         method: "PUT",
         headers: {
@@ -140,7 +96,6 @@ export class FloatingMentor extends Component {
       }
       const student = await res;
 
-      console.log("student:", student);
       this.setState({
         studentprofile: student,
       selectedStudentProfile: selectedStudentProfile
@@ -152,14 +107,12 @@ export class FloatingMentor extends Component {
   };
 
   handleError = () => {
-    console.log("handleError working");
     this.setState({
-      errormessage: "Please choose a modul by using above dropdown menu."
+      errormessage: "Please choose a module by using above dropdown menu."
     });
   };
 
   handleModuleSelection = selected => {
-    console.log("handle Module working....", selected);
     this.setState({
       moduleSelected: selected,
       mentorComments: null,
@@ -168,9 +121,6 @@ export class FloatingMentor extends Component {
   };
 
   render() {
-    console.log("this.state.studentprofile:", this.state);
-    console.log("render working");
-
     const studentsProfile = this.state.studentsProfile;
     const selectedStudentProfile = this.state.selectedStudentProfile;
     return (
@@ -200,7 +150,6 @@ export class FloatingMentor extends Component {
             <Heading is="h2">Select student</Heading>
 
             <Combobox
-              // studentsProfile.map(s => s.name)
 
               items={studentsProfile.map(s => s.name)}
               height={34}

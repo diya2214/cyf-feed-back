@@ -2,7 +2,7 @@ import React from "react"
 import { Link } from "react-router-dom"
 import logo_CYF_square from '../images/logo-CYF-square.png'
 
-import { Pane, Heading, Text } from 'evergreen-ui'; 
+import { Pane, Heading, Text, Icon } from 'evergreen-ui'; 
 
 export default () => (
 
@@ -23,7 +23,7 @@ export default () => (
           }}
         >          
           <h2>
-          CYF Feedback </h2>
+          CYF Feedback Tracker</h2>
         </Link>
         <Pane
          width="10%" 
@@ -31,17 +31,24 @@ export default () => (
         justifyContent="space-around"
 
         >
-          
+{/*           
         <Link
-          to={`/`}
+          to={` `}
           style={{
             textDecoration: "none",
             color: "black"
-          }}
-        >          
+          }}> */}
+        <Icon 
+        // key={}
+        title={'Logged In'}
+        icon="person"
+        color="success"
+        // marginLeft={6}
+      />        
           <Heading is="h3">
             Maria </Heading>
-        </Link> <Text> | </Text>
+        {/* </Link> */}
+         <Text> | </Text>
         <Link
           to={`/`}
           style={{

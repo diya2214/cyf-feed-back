@@ -51,6 +51,7 @@ export const insertComments = async (student,commentData) => {
   } catch (error) {
     swal("Error", "Could not add your comments", "error");
   }
+
 }
 
 export const handleMentor = () => {
