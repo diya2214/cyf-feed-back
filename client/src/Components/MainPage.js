@@ -32,7 +32,7 @@ export class MainPage extends Component {
           alignItems="center"
           borderRadius={3}
           border="default"
-          background="blueTint"
+          background="tint1"
         >
           <Pane
             width="100%"
@@ -58,7 +58,7 @@ export class MainPage extends Component {
                 textDecoration: "none",
                 color: "white"
               }}
-              >Floating Mentor</Link>
+              >Irregular Mentor</Link>
             </Button>
 
             <Button appearance="primary" height={40} margin={24}>

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import moment from "moment"
 import {
   Button,
   Pane,
@@ -90,13 +91,11 @@ export class FloatingMentor extends Component {
           selectedmodule: this.state.moduleSelected
         })
       });
-      console.log("fetch:", body);
+      // console.log("fetch:", body);
       const json = await res.json();
       if (res.status !== 200) {
         alert(json.msg);
-      } else {
-        console.log("else working");
-      }
+      } 
       const student = await res;
 
       this.setState({
@@ -357,7 +356,7 @@ export class FloatingMentor extends Component {
                                   </Paragraph>
                                   <Text padding={8} alignSelf="flex-end">
                                     <Strong>Feedback by </Strong>
-                                    {s.floatingMentorName} on {s.date}{" "}
+                                    {s.floatingMentorName} on {moment(s.date).format("Do MMMM  YYYY")}{" "}
                                     <br />
                                     <Text padding={8}>
                                       {" "}
