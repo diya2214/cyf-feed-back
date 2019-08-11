@@ -70,22 +70,30 @@ export class FloatingMentor extends Component {
             FloatingMentorComments: this.state.commentSubmitted
           });
     }
+ 
+     
+     if (this.state.moduleSelected !== null) {
+     try {
+      const res = await fetch("api/updateComments", {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: this.state.clickedStudent,
+          floatingmentorcomment: this.state.commentSubmitted,
+          floatingMentorName: selectedFloatingMentorName,
+          selectedmodule: this.state.moduleSelected
+        })
+      });
+      const json = await res.json();
+      if (res.status !== 200) {
+        alert(json.msg);
+      } 
+      const student = await res;
 
-    if (this.state.moduleSelected !== null) {
-      try {
-        const res = await fetch("api/updateComments", {
-          method: "PUT",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            name: this.state.clickedStudent,
-            floatingmentorcomment: this.state.commentSubmitted,
-            floatingMentorName: selectedFloatingMentorName,
-            selectedmodule: this.state.moduleSelected
-          })
-        });
+   
 
         const json = await res.json();
         if (res.status !== 200) {

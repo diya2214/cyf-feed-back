@@ -13,7 +13,6 @@ export class MainPage extends Component {
   }
 
   render() {
-    const { message } = this.state;
     return (
       <Pane
         width="100%"
