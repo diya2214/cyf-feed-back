@@ -91,7 +91,6 @@ export class FloatingMentor extends Component {
           selectedmodule: this.state.moduleSelected
         })
       });
-      // console.log("fetch:", body);
       const json = await res.json();
       if (res.status !== 200) {
         alert(json.msg);
