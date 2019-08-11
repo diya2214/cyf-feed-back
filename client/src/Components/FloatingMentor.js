@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import moment from "moment"
+import moment from "moment";
 import {
   Button,
   Pane,
@@ -13,9 +13,7 @@ import {
   Textarea
 } from "evergreen-ui";
 import "../App.css";
-// import mockStudentsProfiles from "../mockStudentsProfiles.json";
-import {getStudents, getSkills} from "./Api";
-import { ThemeConsumer } from "evergreen-ui/commonjs/theme";
+import { getStudents, getSkills } from "./Api";
 
 const selectedFloatingMentorName = "Maria";
 
@@ -52,8 +50,7 @@ export class FloatingMentor extends Component {
     });
   };
 
-  handyStudent = (selected) => {
-    console.log("handystudent working....");
+  handyStudent = selected => {
     const selectedStudentProfile = this.state.studentsProfile.find(s => {
       return s.name === selected;
     });
@@ -62,8 +59,7 @@ export class FloatingMentor extends Component {
       errormessage: null,
       selectedStudentProfile: selectedStudentProfile
     });
-
-     };
+  };
 
   handyComments = async e => {
     e.preventDefault();
@@ -97,14 +93,20 @@ export class FloatingMentor extends Component {
       } 
       const student = await res;
 
-      this.setState({
-        studentprofile: student,
-      selectedStudentProfile: selectedStudentProfile
-      });
-    } catch (err) {
-      console.log(err);
+   
+
+        const json = await res.json();
+        if (res.status !== 200) {
+          alert(json.msg);
+        }
+        const student = await res;
+
+        this.setState({
+          studentprofile: student,
+          selectedStudentProfile: selectedStudentProfile
+        });
+      } catch (err) {}
     }
-  }
   };
 
   handleError = () => {
@@ -123,12 +125,9 @@ export class FloatingMentor extends Component {
 
   render() {
     const studentsProfile = this.state.studentsProfile;
-    const selectedStudentProfile = this.state.selectedStudentProfile;
     return (
       <div>
         <Pane
-          // key={index}
-          // key={index}
           elevation={4}
           height="100%"
           width="auto"
@@ -151,7 +150,6 @@ export class FloatingMentor extends Component {
             <Heading is="h2">Select student</Heading>
 
             <Combobox
-
               items={studentsProfile.map(s => s.name)}
               height={34}
               onChange={selected => this.handyStudent(selected)}
@@ -186,18 +184,10 @@ export class FloatingMentor extends Component {
                 />
                 <Table.Body>
                   <Table.Head>
-                    <Table.TextCell
-                      flexBasis={100}
-                      flexShrink={0}
-                      flexGrow={0}
-                    >
+                    <Table.TextCell flexBasis={100} flexShrink={0} flexGrow={0}>
                       Name:
                     </Table.TextCell>
-                    <Table.TextCell
-                      flexBasis={100}
-                      flexShrink={0}
-                      flexGrow={0}
-                    >
+                    <Table.TextCell flexBasis={100} flexShrink={0} flexGrow={0}>
                       {this.state.selectedStudentProfile &&
                         this.state.selectedStudentProfile.name}
                     </Table.TextCell>
@@ -355,7 +345,8 @@ export class FloatingMentor extends Component {
                                   </Paragraph>
                                   <Text padding={8} alignSelf="flex-end">
                                     <Strong>Feedback by </Strong>
-                                    {s.floatingMentorName} on {moment(s.date).format("Do MMMM  YYYY")}{" "}
+                                    {s.floatingMentorName} on{" "}
+                                    {moment(s.date).format("Do MMMM  YYYY")}{" "}
                                     <br />
                                     <Text padding={8}>
                                       {" "}
@@ -377,7 +368,6 @@ export class FloatingMentor extends Component {
                 marginLeft={20}
                 padding={10}
                 display="flex"
-                // flexDirection= "column"
                 justifyContent="space-around"
                 borderRadius={3}
                 elevation={2}
@@ -396,18 +386,13 @@ export class FloatingMentor extends Component {
                   <Combobox
                     items={this.state.techSkills.map(s => s.module)}
                     height={34}
-                    onChange={selected =>
-                      this.handleModuleSelection(selected)
-                    }
+                    onChange={selected => this.handleModuleSelection(selected)}
                     placeholder="Select Module"
                     autocompleteProps={{
                       title: "Select Module"
                     }}
                   />
-                  <Heading color="#FF0000">
-                    {" "}
-                    {this.state.errormessage}
-                  </Heading>
+                  <Heading color="#FF0000"> {this.state.errormessage}</Heading>
                   <Textarea
                     height={200}
                     width={400}
