@@ -76,7 +76,7 @@ handleComments = (e) => {
       insertComments(this.state.student.name,commentData)
       this.setState({
         mentorComments: this.state.commentSubmitted,
-        commentSubmitted: null,
+        commentSubmitted: '',
         moduleSelectionMsg: null
        })
 };
@@ -246,7 +246,7 @@ handleComments = (e) => {
           width={400}
           placeholder="Mentor evaluation summary"
           onChange={e => this.setState({ commentSubmitted: e.target.value })}
-      // value={this.state.mentorComments}
+          value={this.state.commentSubmitted}
            /> 
               <Button
                 height={38}

@@ -3,41 +3,37 @@ import MainMentor from "./MainMentor";
 import axios from "axios";
 
 
-
-export const getStudents = () => {
-  return axios
-    .get(`/api/students`)
-    .then(response => {
-     return response.data
-    })
-    .catch(function (error) {
+export const getStudents = async() => {
+  try{ 
+    const students = await axios.get(`/api/students`)
+     return students.data
+  }
+  catch(error) {
       swal("Error", "Could not fetch student data ", "error");
       return [];
-    });
+    }
 };
 
-export const getSkills = () => {
-  return axios
-    .get(`/api/skills/tech`)
-    .then(response => {
-     return response.data
-    })
-    .catch(function (error) {
+export const getSkills = async() => {
+  try{
+    const skills = await axios.get(`/api/skills/tech`)
+     return skills.data
+    }
+    catch (error) {
       swal("Error", "Could not fetch student data ", "error");
       return [];
-    });
+    }
 };
 
-export const getSoftSkills = () => {
-  return axios
-    .get(`/api/skills/soft`)
-    .then(response => {
-     return response.data
-    })
-    .catch(function (error) {
-      swal("Error", "Could not fetch student data ", "error");
+export const getSoftSkills = async() => {
+  try{
+      const softSkills = await axios.get(`/api/skills/soft`)
+     return softSkills.data
+  }
+    catch(error) {
+      swal("Error", "Could not fetch soft skills ", "error");
       return [];
-    });
+    }
 };
 
 
