@@ -14,6 +14,7 @@ import {
 } from "evergreen-ui";
 import "../App.css";
 import { getStudents, getSkills } from "./Api";
+import Axios from "axios";
 
 const selectedFloatingMentorName = "Maria";
 
@@ -70,42 +71,24 @@ export class FloatingMentor extends Component {
             FloatingMentorComments: this.state.commentSubmitted
           });
     }
- 
-     
-     if (this.state.moduleSelected !== null) {
-     try {
-      const res = await fetch("api/updateComments", {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
+
+    if (this.state.moduleSelected !== null) {
+      try {
+        const result = await Axios.put("api/updateComments", {
           name: this.state.clickedStudent,
           floatingmentorcomment: this.state.commentSubmitted,
           floatingMentorName: selectedFloatingMentorName,
           selectedmodule: this.state.moduleSelected
-        })
-      });
-      const json = await res.json();
-      if (res.status !== 200) {
-        alert(json.msg);
-      } 
-      const student = await res;
-
-   
-
-        const json = await res.json();
-        if (res.status !== 200) {
-          alert(json.msg);
-        }
-        const student = await res;
-
-        this.setState({
-          studentprofile: student,
-          selectedStudentProfile: selectedStudentProfile
         });
-      } catch (err) {}
+        return result;
+      } catch (error) {
+        swal("Error", "Could not add your comments", "error");
+      }
+
+      this.setState({
+        studentprofile: student,
+        selectedStudentProfile: selectedStudentProfile
+      });
     }
   };
 

@@ -1,318 +1,281 @@
 import React, { Component } from "react";
-import { majorScale, Button, Heading, Pane, TextInputField, FilePicker, Combobox } from 'evergreen-ui';
-// import { Link } from 'react-router-dom';
+import {
+  majorScale,
+  Button,
+  Heading,
+  Pane,
+  TextInputField,
+  Combobox
+} from "evergreen-ui";
 import "../App.css";
-import {getSkills, getSoftSkills} from "./Api.js"
+import { getSkills, getSoftSkills } from "./Api.js";
+import swal from "sweetalert";
+import axios from "axios";
 
-// export default testPage = () => <div>hi</div>
 export default class StudentPage extends Component {
-                 state = {
-                   name: null,
-                   studentPhoto: null,
-                   studentClass: null,
-                   oneTechSkill: null,
-                   oneSoftSkill: null,
-                   softSkills: [],
-                   techinalSkills: [],
-                   inputSoftSkills: [],
-                   getTechSkills: [],
-                   submitMessage: null
-                 };
+  state = {
+    name: null,
+    studentPhoto: null,
+    studentClass: null,
+    oneTechSkill: null,
+    oneSoftSkill: null,
+    softSkills: [],
+    techinalSkills: [],
+    inputSoftSkills: [],
+    getTechSkills: [],
+    submitMessage: null
+  };
 
-                 componentDidMount = async () => {
-                   const inputSoftSkills = await getSoftSkills();
-                   const getTechSkills = await getSkills();
-                   this.setState({
-                     inputSoftSkills: inputSoftSkills,
-                     getTechSkills: getTechSkills
-                   });
-                   // console.log(this.state.getTechSkills)
-                   // console.log(this.state.getSoftSkills)
-                 };
+  componentDidMount = async () => {
+    const inputSoftSkills = await getSoftSkills();
+    const getTechSkills = await getSkills();
+    this.setState({
+      inputSoftSkills: inputSoftSkills,
+      getTechSkills: getTechSkills
+    });
+  };
 
-                 handleFullName = e => {
-                   let value = e.target.value;
-                   this.setState({ name: value });
-                 };
+  handleFullName = e => {
+    let value = e.target.value;
+    this.setState({ name: value });
+  };
 
-                 handleFile = file => {
-                   this.setState({
-                     studentPhoto: file[0].name
-                   });
-                 };
+  handleFile = url => {
+    let picture = url.target.value;
+    this.setState({
+      studentPhoto: picture
+    });
+  };
 
-                 handleTech = selected => {
-                   if (selected !== "None") {
-                     this.setState({
-                       oneTechSkill: selected
-                     });
-                   }
-                 };
+  handleTech = selected => {
+    if (selected !== "None") {
+      this.setState({
+        oneTechSkill: selected
+      });
+    }
+  };
 
-                 handleSoft = selected => {
-                   if (selected !== "None") {
-                     this.setState({
-                       oneSoftSkill: selected
-                     });
-                   }
-                 };
+  handleSoft = selected => {
+    if (selected !== "None") {
+      this.setState({
+        oneSoftSkill: selected
+      });
+    }
+  };
 
-                 handleClass = selected => {
-                   if (selected !== "None") {
-                     this.setState({
-                       studentClass: selected
-                     });
-                   }
-                 };
+  handleClass = selected => {
+    if (selected !== "None") {
+      this.setState({
+        studentClass: selected
+      });
+    }
+  };
 
-                 handleSubmitMessage = e => {
-                   const profilemessage =
-                     "Your Profile has been submitted!";
-                   this.setState({
-                     submitMessage: profilemessage
-                   });
-                   console.log(this.state.submitMessage);
-                 };
+  handleSubmitMessage = e => {
+    const profilemessage = "Your Profile has been submitted!";
+    this.setState({
+      submitMessage: profilemessage
+    });
+  };
 
-                 handleClickTech = () => {
-                   const {
-                     techinalSkills,
-                     oneTechSkill
-                   } = this.state;
-                   if (oneTechSkill !== "None") {
-                     techinalSkills.push(oneTechSkill);
-                     this.setState({
-                       techinalSkills: techinalSkills
-                     });
-                   } else {
-                     return;
-                   }
-                 };
+  handleClickTech = () => {
+    const { techinalSkills, oneTechSkill } = this.state;
+    if (oneTechSkill !== "None") {
+      techinalSkills.push(oneTechSkill);
+      this.setState({
+        techinalSkills: techinalSkills
+      });
+    } else {
+      return;
+    }
+  };
 
-                 handleClickSoft = () => {
-                   const {
-                     softSkills,
-                     oneSoftSkill
-                   } = this.state;
-                   if (oneSoftSkill !== "None") {
-                     softSkills.push(oneSoftSkill);
-                     this.setState({
-                       softSkills: softSkills
-                     });
-                   } else {
-                     return;
-                   }
-                 };
+  handleClickSoft = () => {
+    const { softSkills, oneSoftSkill } = this.state;
+    if (oneSoftSkill !== "None") {
+      softSkills.push(oneSoftSkill);
+      this.setState({
+        softSkills: softSkills
+      });
+    } else {
+      return;
+    }
+  };
 
-                 handleClearForm = e => {
-                   this.setState({
-                     name: null,
-                     studentPhoto: null,
-                     oneTechSkill: null,
-                     oneSoftSkill: null,
-                     softSkills: [],
-                     techinalSkills: []
-                   });
-                   console.log("form cleared");
-                 };
+  handleClearForm = e => {
+    this.setState({
+      name: null,
+      studentPhoto: null,
+      oneTechSkill: null,
+      oneSoftSkill: null,
+      softSkills: [],
+      techinalSkills: []
+    });
+  };
 
-                 handleSubmit = async e => {
-                   e.preventDefault();
-                   const {
-                     name,
-                     studentPhoto,
-                     techinalSkills,
-                     softSkills,
-                     studentClass
-                   } = this.state;
-                   //  console.log(softSkills)
-                   //  console.log(techinalSkills)
-                   //  console.log(name)
-                   await fetch("/api/student", {
-                     method: "POST",
-                     headers: {
-                       Accept: "application/json",
-                       "Content-Type": "application/json"
-                     },
-                     body: JSON.stringify({
-                       name: name,
-                       studentPhoto: studentPhoto,
-                       class: studentClass,
-                       softSkills: softSkills,
-                       techinalSkills: techinalSkills,
-                       floatingMentorcomments: [],
-                       leadMentorcomments: []
-                     })
-                   }).then(response => {
-                     response.json().then(response => {
-                       console.log("Successful" + response);
-                     });
-                   });
-                 };
+  handleSubmit = async e => {
+    e.preventDefault();
+    const {
+      name,
+      studentPhoto,
+      techinalSkills,
+      softSkills,
+      studentClass
+    } = this.state;
 
-                 render() {
-                   return (
-                     <div>
-                       <div className="stu-profile">
-                         <h2>STUDENT PROFILE</h2>
-                       </div>
-                       <Pane
-                         // key={index}
-                         marginLeft={195}
-                         elevation={4}
-                         width="75%"
-                         padding={16}
-                         borderRadius={3}
-                         border="default"
-                         background="tint1"
-                       >
-                         <Heading size={500}>Full Name</Heading>
-                         <TextInputField
-                           inputHeight={40}
-                           marginBottom={32}
-                           width="75%"
-                           size={500}
-                           label=""
-                           placeholder="Full Name"
-                           onChange={e => this.handleFullName(e)}
-                         />
+    try {
+      const result = await axios.post("/api/student", {
+        name: name,
+        studentPhoto: studentPhoto,
+        class: studentClass,
+        softSkills: softSkills,
+        techinalSkills: techinalSkills,
+        floatingMentorcomments: [],
+        leadMentorcomments: []
+      });
+      return result;
+    } catch (error) {
+      swal("Error", "Could not submit", "error");
+    }
+  };
 
-                         <Pane>
-                           <Heading size={500}>
-                             Upload your photo here:
-                           </Heading>
-                           {/* <h5>Upload your photo here:</h5> */}
-                           <FilePicker
-                             multiple
-                             width="75%"
-                             height={40}
-                             marginBottom={32}
-                             label="Upload photo"
-                             onChange={files =>
-                               this.handleFile(files)
-                             }
-                           />
+  render() {
+    return (
+      <div>
+        <div className="stu-profile">
+          <h2>STUDENT PROFILE</h2>
+        </div>
+        <Pane
+          marginLeft={195}
+          elevation={4}
+          width="75%"
+          padding={16}
+          borderRadius={3}
+          border="default"
+          background="tint1"
+        >
+          <Heading size={500}>Full Name</Heading>
+          <TextInputField
+            inputHeight={40}
+            marginBottom={32}
+            width="75%"
+            size={500}
+            label=""
+            placeholder="Full Name"
+            onChange={e => this.handleFullName(e)}
+          />
 
-                           <Pane>
-                             <Heading size={500}>
-                               Select the Technical Skills you're
-                               working on
-                             </Heading>
-                             {/* <h5>Select the Technical skills you're  working on:</h5> */}
-                             <div className="addSkills">
-                               <Combobox
-                                 width="95%"
-                                 height={40}
-                                 items={this.state.getTechSkills.map(
-                                   skills => skills.module
-                                 )}
-                                 // items={['Arrays', 'Functions', 'Array Methods', 'Objects', 'None']}
-                                 onChange={selected =>
-                                   this.handleTech(selected)
-                                 }
-                                 placeholder="Tech Skills"
-                                 label="Tech Skills"
-                                 autocompleteProps={{
-                                   // Used for the title in the autocomplete.
-                                   title: "None"
-                                 }}
-                               />
-                               <Button
-                                 height={40}
-                                 onClick={this.handleClickTech}
-                                 appearance="primary"
-                               >
-                                 Add
-                               </Button>
-                             </div>
-                             <Pane>
-                               <p>
-                                 {this.state.techinalSkills.toString()}
-                               </p>
+          <Pane>
+            <Heading size={500}>Copy/Paste your photo's url here:</Heading>
+            <TextInputField
+              inputHeight={40}
+              marginBottom={32}
+              width="75%"
+              size={500}
+              placeholder="Photo's url"
+              onChange={files => this.handleFile(files)}
+            />
 
-                               <Heading size={500}>
-                                 Select the Soft Skills you're
-                                 working on
-                               </Heading>
+            <Pane>
+              <Heading size={500}>
+                Select the Technical Skills you're working on
+              </Heading>
+              <div className="addSkills">
+                <Combobox
+                  width="95%"
+                  height={40}
+                  items={this.state.getTechSkills.map(
+                    skills => skills.module
+                  )}
+                  onChange={selected => this.handleTech(selected)}
+                  placeholder="Tech Skills"
+                  label="Tech Skills"
+                  autocompleteProps={{
+                    // Used for the title in the autocomplete.
+                    title: "None"
+                  }}
+                />
+                <Button
+                  height={40}
+                  onClick={this.handleClickTech}
+                  appearance="primary"
+                >
+                  Add
+                </Button>
+              </div>
+              <Pane>
+                <p>{this.state.techinalSkills.toString()}</p>
 
-                               {/* <h5>Select the Soft skills you're working on:</h5> */}
-                               <div className="addSkills">
-                                 <Combobox
-                                   width="95%"
-                                   height={40}
-                                   items={this.state.inputSoftSkills.map(
-                                     skills => skills.module
-                                   )}
-                                   // items={['Participating in my class', 'Supporting my class', 'Solving problems 1', 'Solving problems 2', 'None']}
-                                   onChange={selected =>
-                                     this.handleSoft(selected)
-                                   }
-                                   placeholder="Soft Skills"
-                                   label="Soft Skills"
-                                   autocompleteProps={{
-                                     // Used for the title in the autocomplete.
-                                     title: "None"
-                                   }}
-                                 />
-                                 <Button
-                                   height={40}
-                                   onClick={this.handleClickSoft}
-                                   appearance="primary"
-                                 >
-                                   Add
-                                 </Button>
-                               </div>
-                               <Pane>
-                                 <p>
-                                   {this.state.softSkills.toString()}
-                                 </p>
-                               </Pane>
-                               <Pane>
-                                 <Heading size={500}>
-                                   Select your class
-                                 </Heading>
-                                 <Combobox
-                                   width="55%"
-                                   height={40}
-                                   items={[
-                                     "London Class 5",
-                                     "Scotland Class 2",
-                                     "Manchester Class 2"
-                                   ]}
-                                   onChange={selected =>
-                                     this.handleClass(selected)
-                                   }
-                                   placeholder="Student's Class"
-                                   label="class"
-                                   autocompleteProps={{
-                                     // Used for the title in the autocomplete.
-                                     title: "none"
-                                   }}
-                                 />
-                               </Pane>
-                             </Pane>
-                           </Pane>
-                         </Pane>
-                         <Button
-                           type="submit"
-                           onClick={e => {
-                             this.handleSubmit(e);
-                             this.handleSubmitMessage(e);
-                             this.handleClearForm(e);
-                           }}
-                           appearance="primary"
-                           height={majorScale(5)}
-                           marginTop={16}
-                         >
-                           {" "}
-                           SUBMIT PROFILE
-                         </Button>
-                         <Pane>
-                           <p>{this.state.submitMessage}</p>
-                         </Pane>
-                       </Pane>
-                     </div>
-                   );
-                 }
-               }
-// export default StudentPage;
+                <Heading size={500}>
+                  Select the Soft Skills you're working on
+                </Heading>
+
+                <div className="addSkills">
+                  <Combobox
+                    width="95%"
+                    height={40}
+                    items={this.state.inputSoftSkills.map(
+                      skills => skills.module
+                    )}
+                    onChange={selected => this.handleSoft(selected)}
+                    placeholder="Soft Skills"
+                    label="Soft Skills"
+                    autocompleteProps={{
+                      // Used for the title in the autocomplete.
+                      title: "None"
+                    }}
+                  />
+                  <Button
+                    height={40}
+                    onClick={this.handleClickSoft}
+                    appearance="primary"
+                  >
+                    Add
+                  </Button>
+                </div>
+                <Pane>
+                  <p>{this.state.softSkills.toString()}</p>
+                </Pane>
+                <Pane>
+                  <Heading size={500}>Select your class</Heading>
+                  <Combobox
+                    width="55%"
+                    height={40}
+                    items={[
+                      "London Class 5",
+                      "Scotland Class 2",
+                      "Manchester Class 2"
+                    ]}
+                    onChange={selected => this.handleClass(selected)}
+                    placeholder="Student's Class"
+                    label="class"
+                    autocompleteProps={{
+                      title: "none"
+                    }}
+                  />
+                </Pane>
+              </Pane>
+            </Pane>
+          </Pane>
+          <Button
+            type="submit"
+            onClick={e => {
+              this.handleSubmit(e);
+              this.handleSubmitMessage(e);
+              this.handleClearForm(e);
+            }}
+            appearance="primary"
+            height={majorScale(5)}
+            marginTop={16}
+          >
+            {" "}
+            SUBMIT PROFILE
+          </Button>
+          <Pane>
+            <p>{this.state.submitMessage}</p>
+          </Pane>
+        </Pane>
+      </div>
+    );
+  }
+}

@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { getClient } from "./db";
-import { ObjectID } from "mongodb";
 
 const api = new Router();
 
@@ -29,7 +28,6 @@ api.get("/test", (_, res, next) => {
 });
 
 api.post("/student", (req, res) => {
-  console.log("here", req.body);
   const client = getClient();
 
   client.connect(function () {
@@ -44,12 +42,10 @@ api.post("/student", (req, res) => {
 
 api.get("/students", (req, res, next) => {
   const client = getClient();
-  // const studentName = req.params.name;
   client.connect(function () {
     const db = client.db("cyf_feedback");
     const collection = db.collection("student_profile");
     collection.find({}).toArray(function (error, result) {
-      // console.log(result);
       res.send(error || result);
       client.close();
     });
@@ -57,7 +53,6 @@ api.get("/students", (req, res, next) => {
 });
 // ADD LEAD MENTORS COMMENTS 
 api.put("/evaluation/:name?", async (req, res) => {
-  console.log('THIS IS INSIDE BODY ', req.body, 'THIS IS PARAMS', req.params)
   const client = getClient();
   const comments = req.body.commentData
 
@@ -78,7 +73,6 @@ api.put("/evaluation/:name?", async (req, res) => {
         }
       }
     )
-    console.log(result);
     client.close();
     return res.send(result);
   });
@@ -86,7 +80,6 @@ api.put("/evaluation/:name?", async (req, res) => {
 
 //updating comments
 api.put("/updateComments", async (req, res) => {
-  console.log("update endpoint is starting");
   const client = getClient();
   client.connect(async err => {
     if (err) {
@@ -98,22 +91,9 @@ api.put("/updateComments", async (req, res) => {
       floatingMentorName,
       selectedmodule
     } = req.body;
-    const updateObject = {};
 
-    /*
-
-    floatingmentorcomment
-      ? (updateObject.floatingmentorcomment = floatingmentorcomment)
-      : null;
-    floatingmentorname
-      ? (updateObject.floatingmentorname = floatingmentorname)
-      : null;
-    selectedmodule ? (updateObject.selectedmodule = selectedmodule) : null;
-*/
     const db = client.db("cyf_feedback");
     const collection = db.collection("student_profile");
-    console.log(updateObject);
-
     const options = {
       returnOriginal: false
     };
@@ -127,8 +107,6 @@ api.put("/updateComments", async (req, res) => {
       date: new Date(),
       module: selectedmodule
     });
-    console.log(nameStudent[0].floatingMentorcomments);
-
 
     collection.findOneAndUpdate(
       { name: name },
@@ -150,21 +128,6 @@ api.put("/updateComments", async (req, res) => {
   });
 });
 
-// api.get('/student/:id', (req, res, next) => {
-//   console.log('I AM HEREEEEEEEEE')
-//   const client = getClient();
-//   const _id = new ObjectID(req.params.id)
-
-//   client.connect(function () {
-//     const db = client.db("CYFFeedbackDB")
-//     const collection = db.collection("student_profile")
-//     collection.find({ _id }).toArray(function (error, result) {
-//       console.log(result)
-//       res.send(error || result)
-//       client.close()
-//     })
-//   })
-// })
 // GET SKILLS
 api.get("/skills/tech", (req, res, next) => {
   const client = getClient();
