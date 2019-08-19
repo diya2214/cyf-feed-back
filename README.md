@@ -11,22 +11,6 @@ CYF Mentor Feedback
  - [x] Production build (single deployment artifact, React loaded via CDN)
  - [x] [Heroku] deployment
 
-Setup
------
-
-Pick one member of the team to own the repository and pipeline. That person should do the following:
-
- 1. Create a fork of this repository for the team, and rename it something appropriate for your project.
- 2. Click the "Deploy to Heroku" button and create a Heroku account when prompted.
- 3. Fill in the name of the application, select Europe and then click "Deploy App". Note the MongoDB add-on; this will
-    create and link a database for you.
- 4. Once it has deployed successfully, click the "Manage app" button to view the application details.
- 5. Go to the "Deploy" tab, select "Connect to GitHub" and choose your repo.
- 6. Click "Enable automatic deploys".
-
-Whenever you commit to master (or e.g. merge a [pull request]) it will get automatically deployed!
-
-You should now make sure all of the project team are [collaborators] on the repository.
 
 Scripts
 -------
@@ -48,6 +32,5 @@ in what's happening in the background, but you don't need to worry about that.
   [Express]: https://expressjs.com/
   [Heroku]: https://www.heroku.com/
   [Node]: https://nodejs.org/en/
-  [pull request]: https://help.github.com/en/articles/about-pull-requests
   [React]: https://reactjs.org/
   [Webpack]: https://webpack.js.org/
